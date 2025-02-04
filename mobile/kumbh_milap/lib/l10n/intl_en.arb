@@ -1,0 +1,18 @@
+{
+  "loginTitle": "Login",
+  "signUpTitle": "Sign Up",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "usernameLabel": "Username",
+  "confirmPasswordLabel": "Confirm Password",
+  "loginButton": "Login",
+  "signUpButton": "Sign Up",
+  "noAccountText": "Don't have an account? Sign Up",
+  "emailRequiredError": "Please enter your email",
+  "invalidEmailError": "Please enter a valid email",
+  "passwordRequiredError": "Please enter your password",
+  "passwordLengthError": "Password must be at least 6 characters long",
+  "usernameRequiredError": "Please enter a username",
+  "usernameLengthError": "Username must be at least 3 characters long",
+  "passwordMatchError": "Passwords do not match"
+}

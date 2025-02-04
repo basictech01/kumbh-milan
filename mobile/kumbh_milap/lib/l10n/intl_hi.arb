@@ -1,0 +1,18 @@
+{
+  "loginTitle": "लॉग इन",
+  "signUpTitle": "साइन अप",
+  "emailLabel": "ईमेल",
+  "passwordLabel": "पासवर्ड",
+  "usernameLabel": "उपयोगकर्ता नाम",
+  "confirmPasswordLabel": "पासवर्ड की पुष्टि करें",
+  "loginButton": "लॉग इन",
+  "signUpButton": "साइन अप",
+  "noAccountText": "खाता नहीं है? साइन अप करें",
+  "emailRequiredError": "कृपया अपना ईमेल दर्ज करें",
+  "invalidEmailError": "कृपया एक वैध ईमेल दर्ज करें",
+  "passwordRequiredError": "कृपया अपना पासवर्ड दर्ज करें",
+  "passwordLengthError": "पासवर्ड कम से कम 6 अक्षर लंबा होना चाहिए",
+  "usernameRequiredError": "कृपया एक उपयोगकर्ता नाम दर्ज करें",
+  "usernameLengthError": "उपयोगकर्ता नाम कम से कम 3 अक्षर लंबा होना चाहिए",
+  "passwordMatchError": "पासवर्ड मेल नहीं खाते"
+}
