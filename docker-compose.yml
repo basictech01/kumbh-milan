@@ -2,18 +2,20 @@ name: kumbh-milap
 
 services:
 
-  # server:
-  #   container_name: server
-  #   build: ./server
-  #   ports:
-  #     - "3001:3001/tcp"
-  #   volumes:
-  #     - "./server:/home/app/server"
-  #   restart: unless-stopped
-  #   env_file:
-  #     - "./server/.env"
+  server:
+    container_name: server
+    build: ./server
+    ports:
+      - "3001:3001/tcp"
+    volumes:
+      - "./server:/home/app/server"
+    restart: unless-stopped
+    env_file:
+      - "./server/.env"
+    networks:
+      - mynetwork
 
-  db:
+  mysql:
     container_name: mysqldb
     image: mysql:8.0
     restart: always
@@ -23,10 +25,14 @@ services:
       MYSQL_USER: myuser
       MYSQL_PASSWORD: password
     ports:
-      - "13306:3306"
+      - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./server/init.sql:/docker-entrypoint-initdb.d/init.sql
       # - ./server/db/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - mynetwork
 volumes:
   mysql_data:
+networks:
+  mynetwork:

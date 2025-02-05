@@ -1,3 +1,8 @@
+from flask import jsonify
+
+from utils.result import Error
+
+
 class Response:
     def __init__(self, success: bool, status_code: int):
         """
@@ -33,9 +38,21 @@ class SuccessResponse(Response):
             "data": self.data,
         }
 
+    def from_value(value: object, status_code: int = 200):
+        """
+        Create a SuccessResponse from a value.
+
+        :param value: Value to return in case of a successful response.
+        :return: A SuccessResponse object.
+        """
+        return (
+            jsonify(SuccessResponse(status_code=status_code, data=value).to_dict()),
+            status_code,
+        )
+
 
 class ErrorResponse(Response):
-    def __init__(self, status_code: str, error_code: int, message: str):
+    def __init__(self, status_code: int, error_code: int, message: str):
         """
         Response for an error case.
 
@@ -46,6 +63,25 @@ class ErrorResponse(Response):
         super().__init__(success=False, status_code=status_code)
         self.error_code = error_code
         self.message = message
+
+    @staticmethod
+    def from_error(error: Error):
+        """
+        Create an ErrorResponse from a Result object.
+
+        :param result: Result object containing the error information.
+        :return: An ErrorResponse object.
+        """
+        return (
+            jsonify(
+                ErrorResponse(
+                    status_code=error.status_code,
+                    error_code=error.code,
+                    message=error.client_message,
+                ).to_dict()
+            ),
+            error.status_code,
+        )
 
     def to_dict(self):
         """

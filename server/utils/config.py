@@ -1,7 +1,7 @@
 MYSQL = {
-    'host': 'localhost',
-    'user': 'myuser',
-    'database': 'hackweek25',
-    'password': 'password',
-    'port': 13306
+    "host": "mysql",
+    "user": "myuser",
+    "database": "kumbh",
+    "password": "password",
+    "port": 3306,
 }
