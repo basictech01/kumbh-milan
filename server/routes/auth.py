@@ -1,18 +1,18 @@
 from flask import Blueprint, request
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 
-from services.user import (check_username_exists, create_user,
+from services.auth import (check_username_exists, create_user,
                            get_user_from_username_and_password ,update_last_accessed)
 from utils.error import MISSING_FIELD, USER_EXISTS
 from utils.response import ErrorResponse, SuccessResponse
 
-user = Blueprint("user", __name__)
+auth = Blueprint("auth", __name__)
 
 import logging
-log = logging.getLogger("user")
+log = logging.getLogger("auth")
 
 
-@user.route("/check_username_exists", methods=["POST"])
+@auth.route("/check_username_exists", methods=["POST"])
 def check_user():
     data = request.json
     required_fields = ["username"]
@@ -28,7 +28,7 @@ def check_user():
     return SuccessResponse.from_value({"exists": result.value}, 200)
 
 
-@user.route("/register", methods=["POST"])
+@auth.route("/register", methods=["POST"])
 def register():
     data = request.json
     required_fields = ["name", "username", "password", "phone"]
@@ -55,7 +55,7 @@ def register():
     return ErrorResponse.from_error(result.error)
 
 
-@user.route("/login", methods=["POST"])
+@auth.route("/login", methods=["POST"])
 def login():
     data = request.json
     required_fields = ["username", "password"]
@@ -74,7 +74,7 @@ def login():
     return SuccessResponse.from_value(result.value.to_dict(), 200)
 
 
-@user.route("/refresh", methods=["POST"])
+@auth.route("/refresh", methods=["POST"])
 @jwt_required(refresh=True)
 def refresh():
     identity = get_jwt_identity()

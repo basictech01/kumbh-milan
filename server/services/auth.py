@@ -68,8 +68,8 @@ def create_user(name, username, password, phone) -> Result[User]:
             return Result(
                 success=True,
                 value=User(
+                    id=user["id"],
                     name=user["name"],
-                    username=user["username"],
                     phone=user["phone"],
                     access_token=access_token,
                     refresh_token=refresh_token,
@@ -122,8 +122,8 @@ def get_user_from_username_and_password(username: str, password: str) -> Result[
             return Result(
                 success=True,
                 value=User(
+                    id=user["id"],
                     name=user["name"],
-                    username=user["username"],
                     phone=user["phone"],
                     access_token=access_token,
                     refresh_token=refresh_token,

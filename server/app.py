@@ -1,14 +1,16 @@
 from flask import Flask
 
-from routes.user import user
+from routes.auth import auth
 from utils.extensions import bcrypt, jwt
 from utils.logging import setup_logging
 
 app = Flask(__name__)
-app.register_blueprint(user, url_prefix="/user")
 app.config["JWT_SECRET_KEY"] = "supersecretkey"
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 86400
 app.config['JWT_REFRESH_TOKEN_EXPIRES'] = 365 * 24 * 60 * 60
+
+
+app.register_blueprint(auth, url_prefix="/auth")
 
 bcrypt = bcrypt.init_app(app)
 jwt.init_app(app)
