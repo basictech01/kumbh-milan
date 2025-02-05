@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class AuthProvider extends ChangeNotifier {
   String _username = '';
-  String _email = '';
   String _password = '';
   String _confirmPassword = '';
+  String _number = "";
 
+  String get number => _number;
   String get username => _username;
-  String get email => _email;
   String get password => _password;
   String get confirmPassword => _confirmPassword;
 
@@ -16,8 +16,8 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateEmail(String value) {
-    _email = value;
+  void updateNumber(String value) {
+    _number = value;
     notifyListeners();
   }
 

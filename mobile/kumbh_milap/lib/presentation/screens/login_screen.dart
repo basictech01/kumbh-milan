@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import 'package:kumbh_milap/app_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -36,12 +37,12 @@ class LoginScreen extends StatelessWidget {
 
               // Email TextField
               TextField(
-                onChanged: authProvider.updateEmail,
+                onChanged: authProvider.updateUsername,
                 decoration: InputDecoration(
-                  labelText: "Email",
+                  labelText: AppLocalizations.of(context)!.usernameLabel,
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
                   prefixIcon:
-                      Icon(Icons.email_outlined, color: AppTheme.darkGray),
+                      Icon(Icons.person_2_outlined, color: AppTheme.darkGray),
                   filled: true,
                   fillColor: Colors.grey[100],
                   border: OutlineInputBorder(
@@ -58,7 +59,7 @@ class LoginScreen extends StatelessWidget {
               TextField(
                 onChanged: authProvider.updatePassword,
                 decoration: InputDecoration(
-                  labelText: "Password",
+                  labelText: AppLocalizations.of(context)!.passwordLabel,
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
                   prefixIcon:
                       Icon(Icons.lock_outline, color: AppTheme.darkGray),
@@ -102,7 +103,7 @@ class LoginScreen extends StatelessWidget {
                   Navigator.pushNamed(context, '/signup');
                 },
                 child: Text(
-                  "Don't have an account? Sign up",
+                  AppLocalizations.of(context)!.noAccountText,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: AppTheme.secondaryColor,
                         decoration: TextDecoration.underline,

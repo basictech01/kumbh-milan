@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import 'package:kumbh_milap/app_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -38,10 +39,10 @@ class SignUpScreen extends StatelessWidget {
               TextField(
                 onChanged: authProvider.updateUsername,
                 decoration: InputDecoration(
-                  labelText: "Username",
+                  labelText: AppLocalizations.of(context)!.usernameLabel,
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
                   prefixIcon:
-                      Icon(Icons.person_4_outlined, color: AppTheme.darkGray),
+                      Icon(Icons.person_2_outlined, color: AppTheme.darkGray),
                   filled: true,
                   fillColor: Colors.grey[100],
                   border: OutlineInputBorder(
@@ -54,12 +55,11 @@ class SignUpScreen extends StatelessWidget {
               SizedBox(height: 20),
               // Email TextField
               TextField(
-                onChanged: authProvider.updateEmail,
+                onChanged: authProvider.updateNumber,
                 decoration: InputDecoration(
-                  labelText: "Email",
+                  labelText: AppLocalizations.of(context)!.phone,
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
-                  prefixIcon:
-                      Icon(Icons.email_outlined, color: AppTheme.darkGray),
+                  prefixIcon: Icon(Icons.phone, color: AppTheme.darkGray),
                   filled: true,
                   fillColor: Colors.grey[100],
                   border: OutlineInputBorder(
@@ -67,7 +67,7 @@ class SignUpScreen extends StatelessWidget {
                     borderSide: BorderSide.none,
                   ),
                 ),
-                keyboardType: TextInputType.emailAddress,
+                keyboardType: TextInputType.phone,
               ),
 
               SizedBox(height: 20),
@@ -76,7 +76,7 @@ class SignUpScreen extends StatelessWidget {
               TextField(
                 onChanged: authProvider.updatePassword,
                 decoration: InputDecoration(
-                  labelText: "Password",
+                  labelText: AppLocalizations.of(context)!.passwordLabel,
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
                   prefixIcon:
                       Icon(Icons.lock_outline, color: AppTheme.darkGray),
@@ -95,7 +95,7 @@ class SignUpScreen extends StatelessWidget {
               TextField(
                 onChanged: authProvider.updateConfirmPassword,
                 decoration: InputDecoration(
-                  labelText: "Confirm Password",
+                  labelText: AppLocalizations.of(context)!.confirmPasswordLabel,
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
                   prefixIcon:
                       Icon(Icons.lock_outline, color: AppTheme.darkGray),
@@ -139,7 +139,7 @@ class SignUpScreen extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 child: Text(
-                  "Have an account? Log in",
+                  AppLocalizations.of(context)!.haveAccountText,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: AppTheme.secondaryColor,
                         decoration: TextDecoration.underline,
