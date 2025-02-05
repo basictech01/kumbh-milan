@@ -5,5 +5,6 @@ CREATE TABLE user (
     password_hash VARCHAR(1024) NOT NULL,     -- Encrypted password
     phone VARCHAR(20) NOT NULL,         -- Phone number
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Timestamp of user creation
+    ast_accessed TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Timestamp of last login
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
