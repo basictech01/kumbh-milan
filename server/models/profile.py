@@ -39,6 +39,7 @@ class Profile:
 
     def to_dict(self):
         return {
+            "user_id": self.user_id,
             "age": self.age,
             "name": self.name,
             "gender": self.gender,
