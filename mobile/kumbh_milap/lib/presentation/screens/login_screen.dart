@@ -76,24 +76,36 @@ class LoginScreen extends StatelessWidget {
               SizedBox(height: 30),
 
               // Login Button
-              ElevatedButton(
-                onPressed: () async {
-                  bool success = await authProvider.login();
-                  if (success) {
-                    // Navigate to home screen or next
-                    Navigator.pushReplacementNamed(context, '/home');
-                  } else {
-                    // Show error
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
-                  backgroundColor: AppTheme.primaryColor,
-                  padding: EdgeInsets.all(18),
-                ),
-                child:
-                    Icon(Icons.arrow_forward, size: 28, color: AppTheme.white),
-              ),
+              authProvider.isLoading
+                  ? CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: () async {
+                        bool success = await authProvider.login(
+                          authProvider.username,
+                          authProvider.password,
+                        );
+                        if (success) {
+                          // Navigate to home screen or next
+                          Navigator.pushReplacementNamed(context, '/home');
+                        } else {
+                          // Show error
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                authProvider.errorMessage.toString(),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        backgroundColor: AppTheme.primaryColor,
+                        padding: EdgeInsets.all(18),
+                      ),
+                      child: Icon(Icons.arrow_forward,
+                          size: 28, color: AppTheme.white),
+                    ),
 
               SizedBox(height: 20),
 

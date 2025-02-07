@@ -53,7 +53,25 @@ class SignUpScreen extends StatelessWidget {
                 keyboardType: TextInputType.emailAddress,
               ),
               SizedBox(height: 20),
-              // Email TextField
+
+              TextField(
+                onChanged: authProvider.updateName,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.fullname,
+                  labelStyle: Theme.of(context).textTheme.bodyLarge,
+                  prefixIcon:
+                      Icon(Icons.person_3_outlined, color: AppTheme.darkGray),
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                keyboardType: TextInputType.emailAddress,
+              ),
+              SizedBox(height: 20),
+
               TextField(
                 onChanged: authProvider.updateNumber,
                 decoration: InputDecoration(
@@ -111,25 +129,40 @@ class SignUpScreen extends StatelessWidget {
 
               SizedBox(height: 30),
 
-              // Login Button
-              ElevatedButton(
-                onPressed: () async {
-                  bool success = await authProvider.signUp();
-                  if (success) {
-                    // Navigate to home screen or next
-                    Navigator.pushReplacementNamed(context, '/createProfile');
-                  } else {
-                    // Show error
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
-                  backgroundColor: AppTheme.primaryColor,
-                  padding: EdgeInsets.all(18),
-                ),
-                child:
-                    Icon(Icons.arrow_forward, size: 28, color: AppTheme.white),
-              ),
+              // Signup Button
+              authProvider.isLoading
+                  ? CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: () async {
+                        bool success = await authProvider.signup(
+                          authProvider.username,
+                          authProvider.password,
+                          authProvider.number,
+                          authProvider.name,
+                        );
+                        if (success) {
+                          // Navigate to home screen or next
+                          Navigator.pushReplacementNamed(
+                              context, '/createProfile');
+                        } else {
+                          // Show error
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                authProvider.errorMessage.toString(),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        backgroundColor: AppTheme.primaryColor,
+                        padding: EdgeInsets.all(18),
+                      ),
+                      child: Icon(Icons.arrow_forward,
+                          size: 28, color: AppTheme.white),
+                    ),
 
               SizedBox(height: 20),
 

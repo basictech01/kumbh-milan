@@ -1,49 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/language_provider.dart';
-import 'package:kumbh_milap/main.dart';
+import 'login_screen.dart';
 
-class LanguageSelectionScreen extends StatelessWidget {
-  const LanguageSelectionScreen({super.key});
-
+class LanguageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final languageProvider =
-        Provider.of<LanguageProvider>(context, listen: false);
+    final languageProvider = Provider.of<LanguageProvider>(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text(
+          "Kumbh Milap",
+          style: Theme.of(context).textTheme.displayLarge,
+        ),
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Select Your Language',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                languageProvider.changeLanguage('en');
+                languageProvider.setLanguage('en');
                 Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => MyApp()));
+                    context, MaterialPageRoute(builder: (_) => LoginScreen()));
               },
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-              ),
-              child: Text('English', style: TextStyle(fontSize: 18)),
+              child: Text("English"),
             ),
-            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                languageProvider.changeLanguage('hi');
+                languageProvider.setLanguage('hi');
                 Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => MyApp()));
+                    context, MaterialPageRoute(builder: (_) => LoginScreen()));
               },
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-              ),
-              child: Text('हिन्दी', style: TextStyle(fontSize: 18)),
+              child: Text("हिन्दी (Hindi)"),
             ),
           ],
         ),

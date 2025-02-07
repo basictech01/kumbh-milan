@@ -77,20 +77,16 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
                 const SizedBox(height: 40),
 
-                // Full Name TextField
-                TextField(
-                  onChanged: userProvider.updateName,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.fullname,
-                    labelStyle: Theme.of(context).textTheme.bodyLarge,
-                    prefixIcon:
-                        Icon(Icons.person_outline, color: AppTheme.darkGray),
-                    filled: true,
-                    fillColor: Colors.grey[100],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
+                // Display Full Name
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    authProvider.name,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ),
 

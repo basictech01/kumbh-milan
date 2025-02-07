@@ -7,6 +7,7 @@ class AppTheme {
   static const Color secondaryColor = Color(0xFF205AC8); // Soft Yellow
   static const Color backgroundColor = Colors.white;
   static const Color textColor = Color(0xFF58585C); // Dark Gray
+  static const Color titleText = Colors.white;
   static Color? lightGray = Colors.grey[300]; // Light Gray
   static Color? darkGray = Colors.grey[600];
   static const Color black = Colors.black;
@@ -22,7 +23,7 @@ class AppTheme {
       displayLarge: GoogleFonts.martel(
         fontSize: 28,
         fontWeight: FontWeight.bold,
-        color: textColor,
+        color: titleText,
       ),
       displayMedium: GoogleFonts.martel(
         fontSize: 24,

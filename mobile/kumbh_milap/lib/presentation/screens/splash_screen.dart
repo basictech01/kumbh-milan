@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kumbh_milap/presentation/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 import '../providers/language_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -14,23 +15,27 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _checkLanguageSelection();
+    _checkLangauageAndAccess();
   }
 
-  Future<void> _checkLanguageSelection() async {
+  Future<void> _checkLangauageAndAccess() async {
     final languageProvider =
         Provider.of<LanguageProvider>(context, listen: false);
-    bool isSelected = await languageProvider.isLanguageSelected();
-    // bool isSelected = true;
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
+    // Fetch stored language
+    bool isSelected = await languageProvider.loadLanguage();
+    bool isLoggedIn = await authProvider.isLoggedIn();
     await Future.delayed(Duration(seconds: 2));
 
-    if (isSelected) {
+    if (isSelected && isLoggedIn) {
+      Navigator.pushReplacementNamed(context, '/home'); // Go to Login
+    } else if (isSelected) {
       Navigator.pushReplacementNamed(
-          context, '/login'); // Navigate to login screen;
+          context, '/login'); // Go to Language Selection
     } else {
       Navigator.pushReplacementNamed(
-          context, '/langSelect'); // Navigate to language selection screen;
+          context, '/langSelect'); // Go to Language Selection
     }
   }
 
@@ -40,11 +45,12 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Theme.of(context).primaryColor,
       body: Center(
         child: Text(
-          AppLocalizations.of(context)!.appName,
+          AppLocalizations.of(context)!.appName, // Localized app name
           style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).scaffoldBackgroundColor),
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).scaffoldBackgroundColor,
+          ),
         ),
       ),
     );
