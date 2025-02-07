@@ -6,6 +6,6 @@ MYSQL = {
     "port": 3306,
 }
 
-AZURE_STORAGE_CONNECTION_STRING = "xxxxx"
+AZURE_STORAGE_CONNECTION_STRING = "xxxxxx"
 CONTAINER_NAME = "photos"
 AZURE_FILE_PREFIX = "https://kumbhmilap.blob.core.windows.net/photos/"

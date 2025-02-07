@@ -1,5 +1,5 @@
 class User:
-    def __init__(self, id,  name, phone, access_token, refresh_token):
+    def __init__(self, id, name, phone, access_token, refresh_token):
         self.id = id
         self.name = name
         self.phone = phone

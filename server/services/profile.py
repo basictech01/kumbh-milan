@@ -1,6 +1,7 @@
 """
 CREATE TABLE profile (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
     age INT DEFAULT 20,
     gender VARCHAR(20),
     home_town VARCHAR(255),
@@ -24,6 +25,7 @@ CREATE TABLE profile (
 """
 
 import logging
+
 from models.profile import Profile
 from utils.error import DATABASE_ERROR, PROFILE_NOT_FOUND
 from utils.mysql_client import MySQLConnection
@@ -31,7 +33,8 @@ from utils.result import Result
 
 log = logging.getLogger("profile_service")
 
-def get_profile(id):
+
+def get_profile(id) -> Result[Profile]:
     query = "SELECT * FROM profile WHERE user_id = %s"
     try:
         with MySQLConnection() as connection:
@@ -44,12 +47,13 @@ def get_profile(id):
     except Exception as e:
         log.error(f"Error retrieving profile: {e}")
         return Result(success=False, error=DATABASE_ERROR)
-    
+
+
 def update_profile(id, profile_change_map) -> Result[None]:
     query = "UPDATE profile SET "
     query += ", ".join([f"{key} = %s" for key in profile_change_map.keys()])
     query += " WHERE user_id = %s"
-    
+
     try:
         with MySQLConnection() as connection:
             connection.write(query, *profile_change_map.values(), id)
@@ -60,18 +64,28 @@ def update_profile(id, profile_change_map) -> Result[None]:
 
 
 def create_profile(id, profile_data) -> Result[None]:
-    query = "INSERT INTO profile (user_id,"
+    query = "SELECT * from user WHERE id = %s"
+    user = None
+    try:
+        with MySQLConnection() as connection:
+            user = connection.read_one(query, id)
+            if not user:
+                return Result(success=False, error=PROFILE_NOT_FOUND)
+    except Exception as e:
+        log.error(f"Error retrieving user: {e}")
+        return Result(success=False, error=DATABASE_ERROR)
+
+    query = "INSERT INTO profile (user_id, name, "
     query += ", ".join(profile_data.keys())
-    query += ") VALUES (%s, "
+    query += ") VALUES (%s, %s, "
     query += ", ".join(["%s" for _ in profile_data.keys()])
     query += ")"
     log.error(f"Query: {query}")
 
     try:
         with MySQLConnection() as connection:
-            connection.write(query, id, *profile_data.values())
+            connection.write(query, id, user["name"], *profile_data.values())
             return Result(success=True, value=None)
     except Exception as e:
         log.error(f"Error creating profile: {e}")
         return Result(success=False, error=DATABASE_ERROR)
-    

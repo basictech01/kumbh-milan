@@ -1,7 +1,26 @@
 class Profile:
-    def __init__(self,user_id, age, gender, home_town, language, occupation, education, 
-                 sub_group, about, interests, looking_for, advice_to_younger_self, your_meaning_of_life, biggest_achievement, biggest_challenge, profile_picture_url):
+    def __init__(
+        self,
+        user_id,
+        name,
+        age,
+        gender,
+        home_town,
+        language,
+        occupation,
+        education,
+        sub_group,
+        about,
+        interests,
+        looking_for,
+        advice_to_younger_self,
+        your_meaning_of_life,
+        biggest_achievement,
+        biggest_challenge,
+        profile_picture_url,
+    ):
         self.user_id = user_id
+        self.name = name
         self.age = age
         self.gender = gender
         self.home_town = home_town
@@ -21,6 +40,7 @@ class Profile:
     def to_dict(self):
         return {
             "age": self.age,
+            "name": self.name,
             "gender": self.gender,
             "home_town": self.home_town,
             "language": self.language,
@@ -34,5 +54,5 @@ class Profile:
             "your_meaning_of_life": self.your_meaning_of_life,
             "biggest_achievement": self.biggest_achievement,
             "biggest_challenge": self.biggest_challenge,
-            "profile_picture_url": self.profile_picture_url
+            "profile_picture_url": self.profile_picture_url,
         }

@@ -133,6 +133,7 @@ def get_user_from_username_and_password(username: str, password: str) -> Result[
         log.error(f"Error retrieving user by username and password: {e}")
         return Result(success=False, error=DATABASE_ERROR)
 
+
 def update_last_accessed(user_id):
     query = "UPDATE user SET last_accessed = NOW() WHERE id = %s"
     try:

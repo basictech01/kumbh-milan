@@ -1,14 +1,17 @@
 from flask import Blueprint, request
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import (create_access_token, get_jwt_identity,
+                                jwt_required)
 
 from services.auth import (check_username_exists, create_user,
-                           get_user_from_username_and_password ,update_last_accessed)
+                           get_user_from_username_and_password,
+                           update_last_accessed)
 from utils.error import MISSING_FIELD, USER_EXISTS
 from utils.response import ErrorResponse, SuccessResponse
 
 auth = Blueprint("auth", __name__)
 
 import logging
+
 log = logging.getLogger("auth")
 
 
