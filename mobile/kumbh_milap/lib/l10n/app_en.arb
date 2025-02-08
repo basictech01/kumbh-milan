@@ -142,5 +142,60 @@
   "challenges": "Biggest Challenges you faced?",
   "@challenges": {
     "description": "Label for the challenges field"
+  },
+
+  "locationDisabledToast": "Location Service is disabled",
+  "@locationDisabledToast": {
+    "description": "Toast for Location Service is disabled prompt"
+  },
+  "locationPermanentlyDeniedToast": "Location Permission is permanently denied",
+  "@locationPermanentlyDeniedToast": {
+    "description": "Toast for Location permission permanently denied"
+  },
+  "locationPendingToast": "Location Permission is pending",
+  "@locationDeniedToast": {
+    "description": "Toast for Location Permission pending"
+  },
+  "notPresentAtKumbhToast": "You are not present at Kumbh Mela premises",
+  "@notPresentAtKumbhToast": {
+    "description": "Toast for telling that user is not present at kumbh mela"
+  },
+
+  "locationDisabled": "Your Location Service is disabled hence we cannot determine your location",
+  "@locationDisabled": {
+    "description": "Label for Location Service is disabled"
+  },
+  "locationPending": "Please Grant Location Access",
+  "@locationPending": {
+    "description": "Label for Location permission pending for approval"
+  },
+  "locationPermanentlyDenied": "Location permission is permanently denied",
+  "@locationPermanentlyDenied": {
+     "description": "Label for Location permission is permanently denied"
+  },
+  "notPresentAtKumbh": "According to your Current Location. You are not present at Kumbh Mela premises",
+  "@notPresentAtKumbh": {
+     "description": "Label for not present at kumbh mela"
+  },
+  "locationScreenTitle": "Kumbh Milap is only for those inside the Kumbh Mela premises",
+  "@locationScreenTitle": {
+     "description": "Label for location Screen title"
+  },
+
+  "enableLocationService": "Enable Location Service",
+  "@enableLocationService": {
+    "description": "Label for enable location service"
+  },
+  "openSettings": "Open Settings",
+  "@openSettings": {
+    "description": "Label for open settings"
+  },
+  "grantAccess": "Grant Access",
+  "@grantAccess": {
+    "description": "Label for grant access"
+  },
+  "checkAgain": "Check Again",
+  "@checkAgain": {
+    "description": "Label for button to check again"
   }
 }

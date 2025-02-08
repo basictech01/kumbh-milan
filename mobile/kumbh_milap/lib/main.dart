@@ -4,6 +4,7 @@ import 'package:kumbh_milap/presentation/providers/language_provider.dart';
 import 'package:kumbh_milap/presentation/providers/profile_provider.dart';
 import 'package:kumbh_milap/presentation/screens/create_profile_screen.dart';
 import 'package:kumbh_milap/presentation/screens/home_screen.dart';
+import 'package:kumbh_milap/presentation/screens/location_access_screen.dart';
 import 'package:kumbh_milap/presentation/screens/login_screen.dart';
 import 'package:kumbh_milap/presentation/screens/signup_screen.dart';
 import 'package:provider/provider.dart';
@@ -75,6 +76,7 @@ class MyApp extends StatelessWidget {
               "/createProfile": (context) => const CreateProfileScreen(),
               "/splash": (context) => const SplashScreen(),
               "/langSelect": (context) => LanguageScreen(),
+              "/locationAccess": (context) => LocationAccessScreen(),
             },
           );
         },
