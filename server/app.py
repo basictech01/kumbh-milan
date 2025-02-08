@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = "supersecretkey"
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 86400
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = 365 * 24 * 60 * 60
-
+app.config["JWT_VERIFY_SUB"]=False
 
 app.register_blueprint(auth, url_prefix="/auth")
 app.register_blueprint(profile, url_prefix="/profile")

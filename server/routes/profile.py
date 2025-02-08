@@ -94,6 +94,7 @@ def get_profile_handler(id):
 @profile.route("/", methods=["POST"])
 @jwt_required()
 def create_profile_handler():
+    log.error("Create profile")
     result = validate_profile_request(request.json)
     id = get_jwt_identity()
     if not result.success:
@@ -130,7 +131,7 @@ def upload_image():
     if file.filename == "":
         return ErrorResponse.from_error(PHOTO_NOT_FOUND)
     # Generate a unique name for the file (to avoid conflicts)
-    file_name = id + str(uuid.uuid4())
+    file_name = str(id) + str(uuid.uuid4())
     file_url = AZURE_FILE_PREFIX + file_name
     try:
         # Upload file to Azure Blob Storage

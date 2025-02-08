@@ -1,10 +1,8 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/profile_provider.dart';
 import 'package:kumbh_milap/app_theme.dart';
-import 'package:image_picker/image_picker.dart';
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class CreateProfileScreen extends StatefulWidget {
@@ -15,16 +13,6 @@ class CreateProfileScreen extends StatefulWidget {
 }
 
 class _CreateProfileScreenState extends State<CreateProfileScreen> {
-  final ImagePicker _picker = ImagePicker();
-  XFile? _profileImage;
-
-  Future<void> _pickImage() async {
-    final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _profileImage = pickedImage;
-    });
-  }
-
   int additionalFields = 0;
   final List<String> allLanguages = [
     'English',
@@ -49,7 +37,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
-    final userProvider = Provider.of<UserProvider>(context);
+    final userProvider = Provider.of<ProfileProvider>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
@@ -62,15 +50,13 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
               if (additionalFields == 0) ...[
                 // Profile Photo Upload
                 GestureDetector(
-                  onTap: _pickImage,
+                  onTap: () async {
+                    await userProvider.pickAndUploadProfilePhoto();
+                  },
                   child: CircleAvatar(
-                    radius: 80,
-                    backgroundColor: AppTheme.lightGray,
-                    backgroundImage: _profileImage != null
-                        ? FileImage(File(_profileImage!.path))
-                        : null,
-                    child: _profileImage == null
-                        ? Icon(Icons.person, size: 80, color: AppTheme.darkGray)
+                    radius: 50,
+                    backgroundImage: userProvider.profilePhoto != null
+                        ? NetworkImage(userProvider.profilePhoto!)
                         : null,
                   ),
                 ),
@@ -78,19 +64,23 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 const SizedBox(height: 40),
 
                 // Display Full Name
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    authProvider.name,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
+                // TextField(
+                //   onChanged: userProvider.updateName,
+                //   decoration: InputDecoration(
+                //     labelText: AppLocalizations.of(context)!.fullname,
+                //     labelStyle: Theme.of(context).textTheme.bodyLarge,
+                //     prefixIcon: Icon(Icons.person, color: AppTheme.darkGray),
+                //     filled: true,
+                //     fillColor: Colors.grey[100],
+                //     border: OutlineInputBorder(
+                //       borderRadius: BorderRadius.circular(12),
+                //       borderSide: BorderSide.none,
+                //     ),
+                //   ),
+                //   keyboardType: TextInputType.phone,
+                // ),
 
-                const SizedBox(height: 20),
+                // const SizedBox(height: 20),
 
                 TextField(
                   onChanged: userProvider.updateAge,
@@ -194,6 +184,21 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                   ),
                   keyboardType: TextInputType.text,
                 ),
+                const SizedBox(height: 20),
+                TextField(
+                  onChanged: userProvider.updateSubgroup,
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.subGroup,
+                    labelStyle: Theme.of(context).textTheme.bodyLarge,
+                    prefixIcon: Icon(Icons.group, color: AppTheme.darkGray),
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
 
                 const SizedBox(height: 30),
 
@@ -212,21 +217,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                     child: Icon(Icons.arrow_forward,
                         size: 28, color: AppTheme.white)),
               ] else if (additionalFields == 1) ...[
-                TextField(
-                  onChanged: userProvider.updateSubgroup,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.subGroup,
-                    labelStyle: Theme.of(context).textTheme.bodyLarge,
-                    prefixIcon: Icon(Icons.group, color: AppTheme.darkGray),
-                    filled: true,
-                    fillColor: Colors.grey[100],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
                 SingleChildScrollView(
                   child: TextField(
                     onChanged: userProvider.updateLookingFor,
@@ -293,7 +283,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                       selectedColor: Theme.of(context).primaryColor,
                       backgroundColor: Colors.grey[100],
                       labelStyle: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black,
+                        color: (isSelected) ? Colors.white : Colors.black,
                       ),
                     );
                   }).toList(),
@@ -326,7 +316,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                       selectedColor: Theme.of(context).primaryColor,
                       backgroundColor: Colors.grey[100],
                       labelStyle: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black,
+                        color: (isSelected) ? Colors.white : Colors.black,
                       ),
                     );
                   }).toList(),
@@ -461,8 +451,21 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                         child: Icon(Icons.arrow_back,
                             size: 28, color: AppTheme.white)),
                     ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pushReplacementNamed('/home');
+                        onPressed: () async {
+                          await userProvider.createProfile();
+
+                          if (userProvider.error == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text("Profile Created Successfully")),
+                            );
+                            Navigator.pushReplacementNamed(context, '/home');
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(userProvider.error!)),
+                            );
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(

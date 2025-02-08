@@ -1,25 +1,23 @@
 class ProfileModel {
-  final String name;
-  final int age;
-  final String gender;
-  final String? about;
+  int? age;
+  String? gender;
+  String? about;
   String? profilePictureUrl;
-  final String? home;
-  final String? occupation;
-  final String? education;
-  final String? subgroup;
-  final String? lookingFor;
-  final String? advice;
-  final String? meaningOfLife;
-  final String? achievements;
-  final String? challenges;
-  final List<String>? interests;
-  final List<String>? languages;
+  String? home;
+  String? occupation;
+  String? education;
+  String? subgroup;
+  String? lookingFor;
+  String? advice;
+  String? meaningOfLife;
+  String? achievements;
+  String? challenges;
+  List<String>? interests;
+  List<String>? languages;
 
   ProfileModel({
-    required this.name,
-    required this.age,
-    required this.gender,
+    this.age,
+    this.gender,
     this.about,
     this.profilePictureUrl,
     this.home,
@@ -38,7 +36,6 @@ class ProfileModel {
   // Convert model to JSON for API requests
   Map<String, dynamic> toJson() {
     return {
-      "name": name,
       "age": age,
       "gender": gender,
       "about": about,
@@ -55,27 +52,5 @@ class ProfileModel {
       "language": languages,
       "profile_picture_url": profilePictureUrl,
     };
-  }
-
-  // Factory constructor to create an instance from JSON
-  factory ProfileModel.fromJson(Map<String, dynamic> json) {
-    return ProfileModel(
-      name: json['name'],
-      age: json['age'],
-      gender: json['gender'],
-      about: json['about'],
-      profilePictureUrl: json['profile_picture_url'],
-      home: json['home_town'],
-      occupation: json['occupation'],
-      education: json['education'],
-      subgroup: json['sub_group'],
-      lookingFor: json['looking_for'],
-      advice: json['advice_to_younger_self'],
-      meaningOfLife: json['your_meaning_of_life'],
-      achievements: json['biggest_achievement'],
-      challenges: json['biggest_challenge'],
-      interests: List<String>.from(json['interests']),
-      languages: List<String>.from(json['language']),
-    );
   }
 }

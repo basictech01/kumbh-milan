@@ -83,15 +83,15 @@
   "@gender": {
     "description": "Label for the Gender field"
   },
-  "genderMale" : "Male",
+  "genderMale" : "MALE",
   "@genderMale": {
     "description": "Label for male gender"
   },
-  "genderFemale" : "Female",
+  "genderFemale" : "FEMALE",
   "@genderFemale": {
     "description": "Label for female gender"
   },
-  "genderOther" : "Other",
+  "genderOther" : "OTHER",
   "@genderOther": {
     "description": "Label for other genders"
   },
