@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kumbh_milap/presentation/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/language_provider.dart';
 import 'login_screen.dart';
@@ -24,7 +25,7 @@ class LanguageScreen extends StatelessWidget {
               onPressed: () {
                 languageProvider.setLanguage('en');
                 Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (_) => LoginScreen()));
+                    context, MaterialPageRoute(builder: (_) => SplashScreen()));
               },
               child: Text("English"),
             ),
@@ -32,7 +33,7 @@ class LanguageScreen extends StatelessWidget {
               onPressed: () {
                 languageProvider.setLanguage('hi');
                 Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (_) => LoginScreen()));
+                    context, MaterialPageRoute(builder: (_) => SplashScreen()));
               },
               child: Text("हिन्दी (Hindi)"),
             ),
