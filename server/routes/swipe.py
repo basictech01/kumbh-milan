@@ -53,7 +53,7 @@ def swipe_left_handler():
     return SuccessResponse.from_value(result.value, 200)
 
 
-@swipe.route("/matched", methods=["GET"])
+@swipe.route("/matches", methods=["GET"])
 @jwt_required()
 def get_matched_handler():
     id = get_jwt_identity()
@@ -65,7 +65,7 @@ def get_matched_handler():
     return SuccessResponse.from_value(profiles_serialized, 200)
 
 
-@swipe.route("/liked", methods=["GET"])
+@swipe.route("/likes", methods=["GET"])
 @jwt_required()
 def get_liked_handler():
     id = get_jwt_identity()

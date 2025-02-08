@@ -48,8 +48,8 @@ class ProfileModel {
       "your_meaning_of_life": meaningOfLife,
       "biggest_achievement": achievements,
       "biggest_challenge": challenges,
-      "interests": interests,
-      "language": languages,
+      "interests": interests?.join(","),
+      "language": languages?.join(","),
       "profile_picture_url": profilePictureUrl,
     };
   }

@@ -3,7 +3,7 @@ import 'package:kumbh_milap/app_theme.dart';
 import 'package:kumbh_milap/presentation/providers/language_provider.dart';
 import 'package:kumbh_milap/presentation/providers/profile_provider.dart';
 import 'package:kumbh_milap/presentation/screens/create_profile_screen.dart';
-import 'package:kumbh_milap/presentation/screens/home_screen.dart';
+import 'package:kumbh_milap/presentation/screens/home/home_screen.dart';
 import 'package:kumbh_milap/presentation/screens/login_screen.dart';
 import 'package:kumbh_milap/presentation/screens/signup_screen.dart';
 import 'package:provider/provider.dart';

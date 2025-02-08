@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:kumbh_milap/app_theme.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class DiscoverPage extends StatefulWidget {
+  @override
+  _DiscoverPageState createState() => _DiscoverPageState();
+}
 
+class _DiscoverPageState extends State<DiscoverPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      bottomNavigationBar: BottomNavBar(),
-      body: SafeArea(
+    return Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -140,36 +140,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-// Bottom Navigation Bar
-class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.favorite_border),
-          label: '',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_today),
-          label: '',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          label: '',
-        ),
-      ],
-      selectedItemColor: AppTheme.primaryColor,
-      unselectedItemColor: AppTheme.lightGray,
-      showSelectedLabels: false,
-      showUnselectedLabels: false,
     );
   }
 }

@@ -123,16 +123,16 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 Wrap(
                   spacing: 8.0,
                   children: [
-                    AppLocalizations.of(context)!.genderMale,
-                    AppLocalizations.of(context)!.genderFemale,
-                    AppLocalizations.of(context)!.genderOther
+                    ["MALE", AppLocalizations.of(context)!.genderMale],
+                    ["FEMALE", AppLocalizations.of(context)!.genderFemale],
+                    ["OTHER", AppLocalizations.of(context)!.genderOther]
                   ].map((gender) {
                     return ChoiceChip(
-                      label: Text(gender),
-                      selected: userProvider.gender == gender,
+                      label: Text(gender[1]),
+                      selected: userProvider.gender == gender[0],
                       onSelected: (bool selected) {
                         if (selected) {
-                          userProvider.updateGender(gender);
+                          userProvider.updateGender(gender[0]);
                         }
                       },
                       shape: RoundedRectangleBorder(
@@ -141,7 +141,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                       selectedColor: Theme.of(context).primaryColor,
                       backgroundColor: Colors.grey[100],
                       labelStyle: TextStyle(
-                        color: userProvider.gender == gender
+                        color: userProvider.gender == gender[0]
                             ? Colors.white
                             : Colors.black,
                       ),
