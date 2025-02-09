@@ -3,6 +3,7 @@ class ProfileModel {
   int? age;
   String? name;
   String? gender;
+  String? phone;
   String? about;
   String? profilePictureUrl;
   String? home;
@@ -22,6 +23,7 @@ class ProfileModel {
     this.age,
     this.name,
     this.gender,
+    this.phone,
     this.about,
     this.profilePictureUrl,
     this.home,
@@ -65,6 +67,7 @@ class ProfileModel {
       age: json['age'],
       name: json['name'],
       gender: json['gender'],
+      phone: json['phone'],
       about: json['about'],
       profilePictureUrl: json['profile_picture_url'],
       home: json['home_town'],

@@ -60,7 +60,7 @@ class SwipeRepository {
     }
   }
 
-  Future<List<ProfileModel>> getMatches() async {
+  Future<Either<Error, List<ProfileModel>>> getMatches() async {
     String? token = await SharedPrefs().getAccessToken();
 
     if (token == null) {
@@ -77,7 +77,12 @@ class SwipeRepository {
     );
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      final responseBody =  jsonDecode(response.body);
+      try {
+        return Right(parseProfileList(responseBody['data']));
+      } catch (e) {
+        return Left(ParsingError(e.toString()));
+      }
     } else {
       final responseBody = jsonDecode(response.body);
       throw Exception(responseBody['data']['message'].toString());
