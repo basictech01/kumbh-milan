@@ -102,7 +102,7 @@ def create_profile_handler():
     result = create_profile(id, request.json)
     if not result.success:
         return ErrorResponse.from_error(result.error)
-    return SuccessResponse.from_value(True, 201)
+    return SuccessResponse.from_value(result.value.to_dict(), 201)
 
 
 @profile.route("/", methods=["PUT"])

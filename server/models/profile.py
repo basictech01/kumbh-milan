@@ -55,5 +55,5 @@ class Profile:
             "your_meaning_of_life": self.your_meaning_of_life,
             "biggest_achievement": self.biggest_achievement,
             "biggest_challenge": self.biggest_challenge,
-            "profile_picture_url": self.profile_picture_url,
+            "profile_picture_url": self.profile_picture_url
         }

@@ -1,5 +1,7 @@
 class ProfileModel {
+  int? user_id;
   int? age;
+  String? name;
   String? gender;
   String? about;
   String? profilePictureUrl;
@@ -16,7 +18,9 @@ class ProfileModel {
   List<String>? languages;
 
   ProfileModel({
+    this.user_id,
     this.age,
+    this.name,
     this.gender,
     this.about,
     this.profilePictureUrl,
@@ -52,5 +56,28 @@ class ProfileModel {
       "language": languages?.join(","),
       "profile_picture_url": profilePictureUrl,
     };
+  }
+
+  // Convert JSON to model
+  factory ProfileModel.fromJson(Map<String, dynamic> json) {
+    return ProfileModel(
+      user_id: json['user_id'],
+      age: json['age'],
+      name: json['name'],
+      gender: json['gender'],
+      about: json['about'],
+      profilePictureUrl: json['profile_picture_url'],
+      home: json['home_town'],
+      occupation: json['occupation'],
+      education: json['education'],
+      subgroup: json['subgroup'],
+      lookingFor: json['looking_for'],
+      advice: json['advice_to_younger_self'],
+      meaningOfLife: json['your_meaning_of_life'],
+      achievements: json['biggest_achievement'],
+      challenges: json['biggest_challenge'],
+      interests: json['interests']?.split(","),
+      languages: json['language']?.split(","),
+    );
   }
 }

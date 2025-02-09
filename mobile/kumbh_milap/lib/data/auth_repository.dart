@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:kumbh_milap/utils/constants.dart';
 
 class AuthRepository {
-  final String baseUrl =
-      "http://10.0.2.2:3001/auth"; // Replace with your API URL
+  final String baseUrl = "$BACKEND_URL/auth"; // Replace with your API URL
 
   Future<Map<String, dynamic>> login(String username, String password) async {
     final response = await http.post(

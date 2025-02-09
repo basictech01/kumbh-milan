@@ -63,7 +63,7 @@ def update_profile(id, profile_change_map) -> Result[None]:
         return Result(success=False, error=DATABASE_ERROR)
 
 
-def create_profile(id, profile_data) -> Result[None]:
+def create_profile(id, profile_data) -> Result[Profile]:
     query = "SELECT * from user WHERE id = %s"
     user = None
     try:
@@ -85,7 +85,8 @@ def create_profile(id, profile_data) -> Result[None]:
     try:
         with MySQLConnection() as connection:
             connection.write(query, id, user["name"], *profile_data.values())
-            return Result(success=True, value=None)
+            result = get_profile(id)
+            return result
     except Exception as e:
         log.error(f"Error creating profile: {e}")
         return Result(success=False, error=DATABASE_ERROR)

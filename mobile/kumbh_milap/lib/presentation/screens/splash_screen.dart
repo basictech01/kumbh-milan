@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(Duration(seconds: 2));
 
     if (isSelected && isLoggedIn) {
-      Navigator.pushReplacementNamed(context, '/createProfile'); // Go to Login
+      Navigator.pushReplacementNamed(context, '/home'); // Go to Login
     } else if (isSelected) {
       Navigator.pushReplacementNamed(
           context, '/login'); // Go to Language Selection
