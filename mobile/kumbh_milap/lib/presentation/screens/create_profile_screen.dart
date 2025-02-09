@@ -83,6 +83,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 // const SizedBox(height: 20),
 
                 TextField(
+                  controller:
+                      TextEditingController(text: userProvider.age?.toString()),
                   onChanged: userProvider.updateAge,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.age,
@@ -101,6 +103,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 const SizedBox(height: 20),
 
                 TextField(
+                  controller: TextEditingController(text: userProvider.home),
                   onChanged: userProvider.updateHome,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.home,
@@ -153,6 +156,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
                 // Education TextField
                 TextField(
+                  controller:
+                      TextEditingController(text: userProvider.education),
                   onChanged: userProvider.updateEducation,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.education,
@@ -170,6 +175,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 const SizedBox(height: 20),
 
                 TextField(
+                  controller:
+                      TextEditingController(text: userProvider.occupation),
                   onChanged: userProvider.updateOccupation,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.occupation,
@@ -186,6 +193,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 ),
                 const SizedBox(height: 20),
                 TextField(
+                  controller:
+                      TextEditingController(text: userProvider.subgroup),
                   onChanged: userProvider.updateSubgroup,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.subGroup,
@@ -219,6 +228,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
               ] else if (additionalFields == 1) ...[
                 SingleChildScrollView(
                   child: TextField(
+                    controller:
+                        TextEditingController(text: userProvider.lookingFor),
                     onChanged: userProvider.updateLookingFor,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.lookingFor,
@@ -238,6 +249,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 const SizedBox(height: 20),
                 SingleChildScrollView(
                   child: TextField(
+                    controller: TextEditingController(text: userProvider.bio),
                     onChanged: userProvider.updateBio,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.bio,
@@ -356,6 +368,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
               ] else ...[
                 SingleChildScrollView(
                   child: TextField(
+                    controller:
+                        TextEditingController(text: userProvider.advice),
                     onChanged: userProvider.updateAdvice,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.advice,
@@ -376,6 +390,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 const SizedBox(height: 10),
                 SingleChildScrollView(
                   child: TextField(
+                    controller:
+                        TextEditingController(text: userProvider.meaningOfLife),
                     onChanged: userProvider.updateMeaningOfLife,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.meaningOfLife,
@@ -396,6 +412,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 const SizedBox(height: 10),
                 SingleChildScrollView(
                   child: TextField(
+                    controller:
+                        TextEditingController(text: userProvider.achievements),
                     onChanged: userProvider.updateAchievements,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.achievements,
@@ -416,6 +434,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 const SizedBox(height: 10),
                 SingleChildScrollView(
                   child: TextField(
+                    controller:
+                        TextEditingController(text: userProvider.challenges),
                     onChanged: userProvider.updateChallenges,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.challenges,

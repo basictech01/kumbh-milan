@@ -44,4 +44,14 @@ class SharedPrefs {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_languageKey);
   }
+
+  Future<void> addUserId(String userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_id', userId);
+  }
+
+  Future<String?> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('user_id');
+  }
 }

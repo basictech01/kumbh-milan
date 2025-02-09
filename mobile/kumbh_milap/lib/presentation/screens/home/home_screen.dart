@@ -25,20 +25,49 @@ class _HomeScreenState extends State<HomeScreen> {
     LikeProfilePage(),
     DiscoverPage(),
     MatchProfilePage(),
-    ProfilePage(),
+    ProfilePage(
+      name: 'John Doe',
+      username: 'john_doe',
+      profilePhoto: null,
+      bio: 'Passionate about technology and innovation',
+      personalInfo: {
+        'Age': '25',
+        'Gender': 'Male',
+        'Location': 'New York',
+        'Occupation': 'Software Engineer',
+        'Education': 'Master\'s in Computer Science',
+      },
+      additionalInfo: {
+        'Looking For': 'Professional Networking',
+        'Advice': 'Always keep learning',
+        'Meaning of Life': '42',
+        'Achievements': 'Created several successful apps',
+        'Challenges': 'Balancing work and life',
+      },
+      interests: [
+        'Programming',
+        'AI',
+        'Machine Learning',
+        'Mobile Development'
+      ],
+      languages: ['English', 'Spanish', 'French'],
+      onUpdateProfile: () {
+        // Handle profile update
+      },
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      bottomNavigationBar: BottomNavBar(currentIndex: _currentIndex, onTap: _onTap),
+      bottomNavigationBar:
+          BottomNavBar(currentIndex: _currentIndex, onTap: _onTap),
       body: SafeArea(
-        child: IndexedStack(
-          index: _currentIndex,
-          children: _pages,
-        )
-      ),
+          child: IndexedStack(
+        index: _currentIndex,
+        children: _pages,
+      )),
     );
   }
 }
@@ -47,7 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
-  const BottomNavBar({super.key, required this.currentIndex , required this.onTap});
+  const BottomNavBar(
+      {super.key, required this.currentIndex, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
