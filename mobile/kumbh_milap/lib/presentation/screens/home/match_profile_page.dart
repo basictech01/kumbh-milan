@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kumbh_milap/core/model/profile_model.dart';
 import 'package:kumbh_milap/presentation/providers/match_provider.dart';
+import 'package:kumbh_milap/presentation/screens/home/detail_page.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -26,10 +28,7 @@ class _MatchProfilePageState extends State<MatchProfilePage> {
               itemBuilder: (context, index) {
                 final match = matchProvider.matches[index];
                 return Item(
-                  profile_photo_url: match.profilePictureUrl,
-                  name: match.name,
-                  hometown: match.home,
-                  phone: match.phone,
+                  profileModel: match,
                 );
               },
             );
@@ -43,27 +42,31 @@ class _MatchProfilePageState extends State<MatchProfilePage> {
 
 
 class Item extends StatelessWidget {
-  final String? profile_photo_url;
-  final String? name;
-  final String? hometown;
-  final String? phone;
+  final ProfileModel profileModel;
 
-  Item({this.profile_photo_url, this.name, this.hometown, this.phone});
+  Item({required this.profileModel});
 
   @override
   Widget build(BuildContext context) {
-   final Uri _url = Uri.parse("tel://$phone");
+   final Uri _url = Uri.parse("tel://${profileModel.phone}");
     return Card(child: ListTile(
-            onTap: () => {},
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => DetailPage(profileModel: profileModel),
+                ),
+              )
+            },
             leading: CircleAvatar(
               backgroundImage: NetworkImage("https://picsum.photos/200"),
             ),
             title: Text(
-              name ?? "temporary name",
+              profileModel.name ?? "temporary name",
               style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
             ),
             subtitle: Text(
-              hometown ?? "",
+              profileModel.home ?? "",
               style: TextStyle(color: Colors.grey),
               overflow: TextOverflow.ellipsis,
             ),
