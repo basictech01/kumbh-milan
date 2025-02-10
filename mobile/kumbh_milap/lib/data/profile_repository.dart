@@ -2,11 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:kumbh_milap/core/model/profile_model.dart';
-import 'package:kumbh_milap/utils/constants.dart';
 import '../core/shared_pref.dart';
 
 class ProfileRepository {
-  final String baseUrl = "$BACKEND_URL/profile";
+  final String baseUrl = "http://10.0.2.2:3001/profile";
 
   Future<Map<String, dynamic>> createProfile(ProfileModel profile) async {
     String? token = await SharedPrefs().getAccessToken();
@@ -18,7 +17,9 @@ class ProfileRepository {
     Map<String, dynamic> profileData = profile.toJson();
     profileData.removeWhere((key, value) => value == null);
 
-    final response = await http.put(
+    // print("Request Payload: ${jsonEncode(profileData)}");
+
+    final response = await http.post(
       Uri.parse('$baseUrl/'),
       headers: {
         'Content-Type': 'application/json',
@@ -30,21 +31,32 @@ class ProfileRepository {
     final responseData = jsonDecode(response.body);
 
     if (response.statusCode == 201) {
+      //fetch the user_id from the response and save it in shared prefs
+      final userId = responseData['data']['user_id'];
+      await SharedPrefs().addUserId(userId);
       print(responseData);
       return responseData;
     } else {
-      print(responseData);
       throw Exception(responseData);
     }
   }
 
   Future<Map<String, dynamic>> getProfile() async {
+    String? id = "2";
+    String? token = await SharedPrefs().getAccessToken();
+    if (token == null) {
+      throw Exception('Token not found');
+    }
     final response = await http.get(
-      Uri.parse('$baseUrl'),
-      headers: {'Content-Type': 'application/json'},
+      Uri.parse('$baseUrl/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer $token"
+      },
     );
 
     if (response.statusCode == 200) {
+      print(response.body);
       return jsonDecode(response.body);
     } else {
       final responseBody = jsonDecode(response.body);

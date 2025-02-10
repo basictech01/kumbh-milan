@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../app_theme.dart';
 
 class InterestsSection extends StatelessWidget {
@@ -14,6 +13,16 @@ class InterestsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final filteredInterests =
+        interests.where((interest) => interest.isNotEmpty).toList();
+    final filteredLanguages =
+        languages.where((language) => language.isNotEmpty).toList();
+
+    if (filteredInterests.isEmpty && filteredLanguages.isEmpty) {
+      return SizedBox
+          .shrink(); // Return an empty widget if no information is available
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -36,11 +45,13 @@ class InterestsSection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildChipSection(context, 'Interests', interests),
-                if (languages.isNotEmpty) ...[
+                if (filteredInterests.isNotEmpty)
+                  _buildChipSection(context, 'Interests', filteredInterests),
+                if (filteredInterests.isNotEmpty &&
+                    filteredLanguages.isNotEmpty)
                   const SizedBox(height: 16),
-                  _buildChipSection(context, 'Languages', languages),
-                ],
+                if (filteredLanguages.isNotEmpty)
+                  _buildChipSection(context, 'Languages', filteredLanguages),
               ],
             ),
           ),

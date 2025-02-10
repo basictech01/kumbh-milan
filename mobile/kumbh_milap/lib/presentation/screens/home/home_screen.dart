@@ -4,6 +4,10 @@ import 'package:kumbh_milap/presentation/screens/home/discover_page.dart';
 import 'package:kumbh_milap/presentation/screens/home/like_profile_page.dart';
 import 'package:kumbh_milap/presentation/screens/home/match_profile_page.dart';
 import 'package:kumbh_milap/presentation/screens/home/profile_page.dart';
+import 'package:provider/provider.dart';
+
+import '../../../core/model/profile_model.dart';
+import '../../providers/profile_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,6 +18,22 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchUserProfile();
+    });
+  }
+
+  void _fetchUserProfile() async {
+    print('Fetching profile');
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+    if (profileProvider.profileModel == null) {
+      await profileProvider.getProfile();
+    }
+  }
 
   void _onTap(int index) {
     setState(() {
@@ -25,36 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     LikeProfilePage(),
     DiscoverPage(),
     MatchProfilePage(),
-    ProfilePage(
-      name: 'John Doe',
-      username: 'john_doe',
-      profilePhoto: null,
-      bio: 'Passionate about technology and innovation',
-      personalInfo: {
-        'Age': '25',
-        'Gender': 'Male',
-        'Location': 'New York',
-        'Occupation': 'Software Engineer',
-        'Education': 'Master\'s in Computer Science',
-      },
-      additionalInfo: {
-        'Looking For': 'Professional Networking',
-        'Advice': 'Always keep learning',
-        'Meaning of Life': '42',
-        'Achievements': 'Created several successful apps',
-        'Challenges': 'Balancing work and life',
-      },
-      interests: [
-        'Programming',
-        'AI',
-        'Machine Learning',
-        'Mobile Development'
-      ],
-      languages: ['English', 'Spanish', 'French'],
-      onUpdateProfile: () {
-        // Handle profile update
-      },
-    ),
+    ProfilePage(),
   ];
 
   @override

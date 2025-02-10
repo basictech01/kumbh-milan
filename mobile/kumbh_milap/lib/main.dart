@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kumbh_milap/app_theme.dart';
+import 'package:kumbh_milap/data/swipe_repository.dart';
+import 'package:kumbh_milap/presentation/providers/discover_provider.dart';
 import 'package:kumbh_milap/presentation/providers/language_provider.dart';
 import 'package:kumbh_milap/presentation/providers/profile_provider.dart';
 import 'package:kumbh_milap/presentation/screens/create_profile_screen.dart';
@@ -50,6 +52,9 @@ class MyApp extends StatelessWidget {
           provider.loadLanguage();
           return provider;
         }),
+        ChangeNotifierProvider(
+            create: (_) =>
+                DiscoverProvider(swipeRepository: SwipeRepository())),
       ],
       child: Consumer<LanguageProvider>(
         builder: (context, languageProvider, child) {

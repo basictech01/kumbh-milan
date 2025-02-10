@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:kumbh_milap/core/model/profile_model.dart';
 import '../../data/profile_repository.dart';
@@ -12,8 +11,10 @@ class ProfileProvider with ChangeNotifier {
   bool _isLoading = false;
   String? _error;
   Map<String, dynamic>? _profileData;
+  ProfileModel? _profileModel;
 
   String? _username;
+  String? _name;
   int? _age;
   String? _gender;
   String? _bio;
@@ -31,6 +32,7 @@ class ProfileProvider with ChangeNotifier {
   List<String> _languages = [];
 
   String? get username => _username;
+  String? get name => _name;
   int? get age => _age;
   String? get gender => _gender;
   String? get bio => _bio;
@@ -50,6 +52,7 @@ class ProfileProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
   Map<String, dynamic>? get profileData => _profileData;
+  ProfileModel? get profileModel => _profileModel;
 
   void updateUsername(String value) {
     _username = value.isNotEmpty ? value : null;
@@ -196,5 +199,21 @@ class ProfileProvider with ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future<void> getProfile() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    // final userId = await SharedPrefs().getUserId();
+    try {
+      final response = await _profileRepo.getProfile();
+      _profileModel = ProfileModel.fromJson(response['data']);
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }

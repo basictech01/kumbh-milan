@@ -79,8 +79,12 @@ class ProfileModel {
       meaningOfLife: json['your_meaning_of_life'],
       achievements: json['biggest_achievement'],
       challenges: json['biggest_challenge'],
-      interests: json['interests']?.split(","),
-      languages: json['language']?.split(","),
+      interests: json['interests'] != null && json['interests'] is String
+          ? json['interests'].split(",")
+          : [],
+      languages: json['language'] != null && json['language'] is String
+          ? json['language'].split(",")
+          : [],
     );
   }
 }
