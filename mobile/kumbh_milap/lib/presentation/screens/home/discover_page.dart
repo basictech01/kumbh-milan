@@ -6,26 +6,16 @@ import '../components/profile_button.dart';
 import '../components/profile_header.dart';
 import '../components/profile_info_section.dart';
 
-class DiscoverPage extends StatefulWidget {
-  @override
-  _DiscoverPageState createState() => _DiscoverPageState();
-}
 
-class _DiscoverPageState extends State<DiscoverPage> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DiscoverProvider>(context, listen: false).fetchProfiles();
-    });
-  }
-
+class DiscoverPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Consumer<DiscoverProvider>(
-        builder: (context, discoverProvider, child) {
-          if (discoverProvider.isLoading) {
+    return ChangeNotifierProvider(
+      create: (_) => DiscoverProvider()..fetchProfiles(),
+      child: Builder(builder: (context) {
+        final discoverProvider = Provider.of<DiscoverProvider>(context);
+
+        if (discoverProvider.isLoading) {
             return Center(child: CircularProgressIndicator());
           }
 
@@ -34,6 +24,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
           }
 
           final profiles = discoverProvider.profiles;
+          print(profiles);
 
           return PageView.builder(
             itemCount: profiles.length,
@@ -89,6 +80,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                             },
                             label: 'Swipe Left',
                           ),
+                          SizedBox(width: 10),
                           ProfileButton(
                             onPressed: () {
                               discoverProvider
@@ -104,8 +96,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
               );
             },
           );
-        },
-      ),
-    );
+      }));
   }
 }

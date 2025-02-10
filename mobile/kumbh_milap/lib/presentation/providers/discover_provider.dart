@@ -5,12 +5,10 @@ import 'package:kumbh_milap/core/model/profile_model.dart';
 import '../../data/swipe_repository.dart';
 
 class DiscoverProvider extends ChangeNotifier {
-  final SwipeRepository swipeRepository;
+  final SwipeRepository swipeRepository = SwipeRepository();
   List<ProfileModel> _profiles = [];
   bool _isLoading = false;
   String? _errorMessage;
-
-  DiscoverProvider({required this.swipeRepository});
 
   List<ProfileModel> get profiles => _profiles;
   bool get isLoading => _isLoading;
@@ -21,7 +19,7 @@ class DiscoverProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-    final result = await swipeRepository.getMatches();
+    final result = await swipeRepository.getSwipes();
     result.fold(
       (error) {
         _errorMessage = error.message;

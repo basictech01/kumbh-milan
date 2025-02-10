@@ -60,6 +60,35 @@ class SwipeRepository {
     }
   }
 
+  Future<Either<Error, List<ProfileModel>>> getSwipes() async {
+    String? token = await SharedPrefs().getAccessToken();
+
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer ${token}"
+      },
+
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody =  jsonDecode(response.body);
+      try {
+        return Right(parseProfileList(responseBody['data']));
+      } catch (e) {
+        return Left(ParsingError(e.toString()));
+      }
+    } else {
+      final responseBody = jsonDecode(response.body);
+      throw Exception(responseBody['data']['message'].toString());
+    }
+  }
+
   Future<Either<Error, List<ProfileModel>>> getMatches() async {
     String? token = await SharedPrefs().getAccessToken();
 

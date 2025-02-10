@@ -52,9 +52,6 @@ class MyApp extends StatelessWidget {
           provider.loadLanguage();
           return provider;
         }),
-        ChangeNotifierProvider(
-            create: (_) =>
-                DiscoverProvider(swipeRepository: SwipeRepository())),
       ],
       child: Consumer<LanguageProvider>(
         builder: (context, languageProvider, child) {
