@@ -18,22 +18,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _fetchUserProfile();
-    });
-  }
-
-  void _fetchUserProfile() async {
-    print('Fetching profile');
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
-    if (profileProvider.profileModel == null) {
-      await profileProvider.getProfile();
-    }
-  }
 
   void _onTap(int index) {
     setState(() {

@@ -1,9 +1,19 @@
+import 'dart:ffi';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefs {
   static const String _accessTokenKey = 'access_token';
   static const String _refreshTokenKey = 'refresh_token';
   static const String _languageKey = 'selected_language';
+  static const String _userIdKey = 'user_id';
+
+  Future<void> saveTokensAndUserId(Map<String, dynamic> tokens) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_accessTokenKey, tokens['data']['access_token']!);
+    await prefs.setString(_refreshTokenKey, tokens['data']['refresh_token']!);
+    await prefs.setInt(_userIdKey, tokens['data']['id']!);
+  }
 
   Future<void> saveTokens(Map<String, dynamic> tokens) async {
     final prefs = await SharedPreferences.getInstance();
@@ -45,13 +55,18 @@ class SharedPrefs {
     return prefs.getString(_languageKey);
   }
 
-  Future<void> addUserId(String userId) async {
+  Future<void> addUserId(int? userId) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user_id', userId);
+    await prefs.setInt(_userIdKey, userId!);
   }
 
-  Future<String?> getUserId() async {
+  Future<int?> getUserId() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('user_id');
+    return prefs.getInt('user_id');
+  }
+
+  Future<void> removeUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_userIdKey);
   }
 }

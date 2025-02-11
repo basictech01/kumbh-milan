@@ -34,7 +34,7 @@ class ProfileRepository {
       //fetch the user_id from the response and save it in shared prefs
       final userId = responseData['data']['user_id'];
       await SharedPrefs().addUserId(userId);
-      print(responseData);
+      // print(responseData);
       return responseData;
     } else {
       throw Exception(responseData);
@@ -42,7 +42,7 @@ class ProfileRepository {
   }
 
   Future<Map<String, dynamic>> getProfile() async {
-    String? id = "2";
+    int? id = await SharedPrefs().getUserId();
     String? token = await SharedPrefs().getAccessToken();
     if (token == null) {
       throw Exception('Token not found');
@@ -56,7 +56,7 @@ class ProfileRepository {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
       return jsonDecode(response.body);
     } else {
       final responseBody = jsonDecode(response.body);

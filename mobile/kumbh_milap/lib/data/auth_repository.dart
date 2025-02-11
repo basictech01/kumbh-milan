@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:kumbh_milap/utils/constants.dart';
 
+import '../core/shared_pref.dart';
+
 class AuthRepository {
   final String baseUrl = "$BACKEND_URL/auth"; // Replace with your API URL
 
@@ -36,6 +38,31 @@ class AuthRepository {
     if (response.statusCode == 201) {
       // print(response.body);
       return jsonDecode(response.body);
+    } else {
+      final responseBody = jsonDecode(response.body);
+      throw Exception(responseBody['data']['message'].toString());
+    }
+  }
+
+  Future<bool> refreshAccessToken() async {
+    String? refreshToken = await SharedPrefs().getRefreshToken();
+
+    if (refreshToken == null) {
+      throw Exception('Refresh token not found');
+    }
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/refresh'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer $refreshToken"
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+      await SharedPrefs().saveTokens(responseBody);
+      return true;
     } else {
       final responseBody = jsonDecode(response.body);
       throw Exception(responseBody['data']['message'].toString());
