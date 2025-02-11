@@ -5,12 +5,13 @@ import '../components/profile_additional_info.dart';
 import '../components/profile_button.dart';
 import '../components/profile_header.dart';
 import '../components/profile_info_section.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class DiscoverPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (_) => DiscoverProvider()..fetchProfiles(),
+        create: (_) => DiscoverProvider()..fetchProfiles(context),
         child: Builder(builder: (context) {
           final discoverProvider = Provider.of<DiscoverProvider>(context);
 
@@ -43,24 +44,31 @@ class DiscoverPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
                       InfoSection(
-                        title: 'Personal Information',
+                        title: AppLocalizations.of(context)!.personalInfo,
                         information: {
-                          'Age': profile.age?.toString(),
-                          'Gender': profile.gender,
-                          'Location': profile.home,
-                          'Occupation': profile.occupation,
-                          'Education': profile.education,
+                          AppLocalizations.of(context)!.age:
+                              profile.age?.toString(),
+                          AppLocalizations.of(context)!.gender: profile.gender,
+                          AppLocalizations.of(context)!.location: profile.home,
+                          AppLocalizations.of(context)!.occupation:
+                              profile.occupation,
+                          AppLocalizations.of(context)!.education:
+                              profile.education,
                         },
                       ),
                       const SizedBox(height: 20),
                       InfoSection(
-                        title: 'Additional Information',
+                        title: AppLocalizations.of(context)!.additionInfo,
                         information: {
-                          'Looking For': profile.lookingFor,
-                          'Advice': profile.advice,
-                          'Meaning of Life': profile.meaningOfLife,
-                          'Achievements': profile.achievements,
-                          'Challenges': profile.challenges,
+                          AppLocalizations.of(context)!.lookingFor:
+                              profile.lookingFor,
+                          AppLocalizations.of(context)!.advice: profile.advice,
+                          AppLocalizations.of(context)!.meaningOfLife:
+                              profile.meaningOfLife,
+                          AppLocalizations.of(context)!.achievements:
+                              profile.achievements,
+                          AppLocalizations.of(context)!.challenges:
+                              profile.challenges,
                         },
                       ),
                       const SizedBox(height: 20),
@@ -76,14 +84,14 @@ class DiscoverPage extends StatelessWidget {
                             onPressed: () {
                               discoverProvider.swipeLeft(profile.user_id);
                             },
-                            label: 'Swipe Left',
+                            label: AppLocalizations.of(context)!.swipeLeft,
                           ),
                           SizedBox(width: 10),
                           ProfileButton(
                             onPressed: () {
                               discoverProvider.swipeRight(profile.user_id);
                             },
-                            label: 'Swipe Right',
+                            label: AppLocalizations.of(context)!.swipeRight,
                           ),
                         ],
                       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kumbh_milap/presentation/screens/components/custom_button.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../app_theme.dart';
 
 class ProfileHeader extends StatelessWidget {
@@ -79,7 +79,9 @@ class ProfileHeader extends StatelessWidget {
                     onPressed: () {},
                   )
                 else
-                  CustomButton(text: 'Say Hi', onPressed: () {}),
+                  CustomButton(
+                      text: AppLocalizations.of(context)!.match,
+                      onPressed: () {}),
               ]),
             ],
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kumbh_milap/presentation/screens/components/error_box.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import 'package:kumbh_milap/app_theme.dart';
@@ -80,22 +81,24 @@ class LoginScreen extends StatelessWidget {
                   ? CircularProgressIndicator()
                   : ElevatedButton(
                       onPressed: () async {
+                        bool connected =
+                            await authProvider.checkInternetConnection(context);
+                        if (!connected) {
+                          showErrorDialog(context,
+                              AppLocalizations.of(context)!.networkError);
+                          return;
+                        }
                         bool success = await authProvider.login(
                           authProvider.username,
                           authProvider.password,
+                          context,
                         );
                         if (success) {
                           // Navigate to home screen or next
                           Navigator.pushReplacementNamed(context, '/home');
                         } else {
-                          // Show error
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                authProvider.errorMessage.toString(),
-                              ),
-                            ),
-                          );
+                          showErrorDialog(
+                              context, authProvider.errorMessage.toString());
                         }
                       },
                       style: ElevatedButton.styleFrom(

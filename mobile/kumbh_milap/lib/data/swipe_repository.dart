@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:math';
 import 'package:either_dart/either.dart';
@@ -11,17 +10,16 @@ import 'package:kumbh_milap/utils/constants.dart';
 class SwipeRepository {
   final String baseUrl = "$BACKEND_URL/swipe";
 
-
-  Future<bool> swipeRight(String userId) async {
+  Future<bool> swipeRight(int userId) async {
     String? token = await SharedPrefs().getAccessToken();
-    
+
     if (token == null) {
       throw Exception('Token not found');
     }
-    
+
     final response = await http.post(
       Uri.parse('$baseUrl/right'),
-      body: jsonEncode({'user_id': userId}),
+      body: jsonEncode({'user_id_swiped': userId}),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': "Bearer ${token}"
@@ -36,16 +34,16 @@ class SwipeRepository {
     }
   }
 
-  Future<bool> swipeLeft(String userId) async {
+  Future<bool> swipeLeft(int userId) async {
     String? token = await SharedPrefs().getAccessToken();
-    
+
     if (token == null) {
       throw Exception('Token not found');
     }
 
     final response = await http.post(
       Uri.parse('$baseUrl/left'),
-      body: jsonEncode({'user_id': userId}),
+      body: jsonEncode({'user_id_swiped': userId}),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': "Bearer ${token}"
@@ -73,11 +71,10 @@ class SwipeRepository {
         'Content-Type': 'application/json',
         'Authorization': "Bearer ${token}"
       },
-
     );
 
     if (response.statusCode == 200) {
-      final responseBody =  jsonDecode(response.body);
+      final responseBody = jsonDecode(response.body);
       try {
         return Right(parseProfileList(responseBody['data']));
       } catch (e) {
@@ -102,11 +99,10 @@ class SwipeRepository {
         'Content-Type': 'application/json',
         'Authorization': "Bearer ${token}"
       },
-
     );
 
     if (response.statusCode == 200) {
-      final responseBody =  jsonDecode(response.body);
+      final responseBody = jsonDecode(response.body);
       try {
         return Right(parseProfileList(responseBody['data']));
       } catch (e) {
@@ -120,7 +116,7 @@ class SwipeRepository {
 
   Future<Either<Error, List<ProfileModel>>> getLikes() async {
     String? token = await SharedPrefs().getAccessToken();
-    
+
     if (token == null) {
       return Left(UnAuthenticated());
     }
@@ -136,6 +132,7 @@ class SwipeRepository {
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
       try {
+        print(responseBody);
         return Right(parseProfileList(responseBody['data']));
       } catch (e) {
         return Left(ParsingError(e.toString()));

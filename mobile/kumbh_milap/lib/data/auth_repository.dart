@@ -1,13 +1,17 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kumbh_milap/utils/constants.dart';
 
 import '../core/shared_pref.dart';
+import '../utils/custom_exception.dart';
+import '../utils/error_messages.dart';
 
 class AuthRepository {
   final String baseUrl = "$BACKEND_URL/auth"; // Replace with your API URL
 
-  Future<Map<String, dynamic>> login(String username, String password) async {
+  Future<Map<String, dynamic>> login(
+      String username, String password, BuildContext context) async {
     final response = await http.post(
       Uri.parse('$baseUrl/login'),
       body: jsonEncode({'username': username, 'password': password}),
@@ -18,12 +22,23 @@ class AuthRepository {
       return jsonDecode(response.body);
     } else {
       final responseBody = jsonDecode(response.body);
-      throw Exception(responseBody['data']['message'].toString());
+      switch (response.statusCode) {
+        case 400:
+          throw CustomException(ErrorMessages.loginFailed(context));
+        case 401:
+          throw CustomException(ErrorMessages.loginFailed(context));
+        case 404:
+          throw CustomException(ErrorMessages.userNotFound(context));
+        case 500:
+          throw CustomException(ErrorMessages.serverError(context));
+        default:
+          throw CustomException(responseBody['data']['message'].toString());
+      }
     }
   }
 
-  Future<Map<String, dynamic>> signup(
-      String username, String password, String name, String phone) async {
+  Future<Map<String, dynamic>> signup(String username, String password,
+      String name, String phone, BuildContext context) async {
     final response = await http.post(
       Uri.parse('$baseUrl/register'),
       body: jsonEncode({
@@ -40,7 +55,17 @@ class AuthRepository {
       return jsonDecode(response.body);
     } else {
       final responseBody = jsonDecode(response.body);
-      throw Exception(responseBody['data']['message'].toString());
+      print(response.statusCode);
+      switch (response.statusCode) {
+        case 400:
+          throw CustomException(ErrorMessages.userNameAlreadyExists(context));
+        case 401:
+          throw CustomException(ErrorMessages.unknownError(context));
+        case 500:
+          throw CustomException(ErrorMessages.serverError(context));
+        default:
+          throw CustomException(responseBody['data']['message'].toString());
+      }
     }
   }
 

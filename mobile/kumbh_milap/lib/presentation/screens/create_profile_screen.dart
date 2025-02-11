@@ -36,7 +36,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
     final userProvider = Provider.of<ProfileProvider>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -62,25 +61,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 ),
 
                 const SizedBox(height: 40),
-
-                // Display Full Name
-                // TextField(
-                //   onChanged: userProvider.updateName,
-                //   decoration: InputDecoration(
-                //     labelText: AppLocalizations.of(context)!.fullname,
-                //     labelStyle: Theme.of(context).textTheme.bodyLarge,
-                //     prefixIcon: Icon(Icons.person, color: AppTheme.darkGray),
-                //     filled: true,
-                //     fillColor: Colors.grey[100],
-                //     border: OutlineInputBorder(
-                //       borderRadius: BorderRadius.circular(12),
-                //       borderSide: BorderSide.none,
-                //     ),
-                //   ),
-                //   keyboardType: TextInputType.phone,
-                // ),
-
-                // const SizedBox(height: 20),
 
                 TextField(
                   controller:
@@ -269,7 +249,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Preferred Language:',
+                  AppLocalizations.of(context)!.prefLanguage,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 Wrap(
@@ -476,9 +456,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
                           if (userProvider.error == null) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content:
-                                      Text("Profile Created Successfully")),
+                              SnackBar(
+                                  content: Text(AppLocalizations.of(context)!
+                                      .profileSuccess)),
                             );
                             Navigator.pushReplacementNamed(context, '/home');
                           } else {
@@ -495,7 +475,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                           padding: EdgeInsets.all(18),
                         ),
                         child: Text(
-                          "Submit",
+                          AppLocalizations.of(context)!.submit,
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge
