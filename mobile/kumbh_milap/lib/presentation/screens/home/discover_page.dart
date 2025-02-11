@@ -6,16 +6,15 @@ import '../components/profile_button.dart';
 import '../components/profile_header.dart';
 import '../components/profile_info_section.dart';
 
-
 class DiscoverPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => DiscoverProvider()..fetchProfiles(),
-      child: Builder(builder: (context) {
-        final discoverProvider = Provider.of<DiscoverProvider>(context);
+        create: (_) => DiscoverProvider()..fetchProfiles(),
+        child: Builder(builder: (context) {
+          final discoverProvider = Provider.of<DiscoverProvider>(context);
 
-        if (discoverProvider.isLoading) {
+          if (discoverProvider.isLoading) {
             return Center(child: CircularProgressIndicator());
           }
 
@@ -75,16 +74,14 @@ class DiscoverPage extends StatelessWidget {
                         children: [
                           ProfileButton(
                             onPressed: () {
-                              discoverProvider
-                                  .swipeLeft(profile.user_id! as String);
+                              discoverProvider.swipeLeft(profile.user_id);
                             },
                             label: 'Swipe Left',
                           ),
                           SizedBox(width: 10),
                           ProfileButton(
                             onPressed: () {
-                              discoverProvider
-                                  .swipeRight(profile.user_id! as String);
+                              discoverProvider.swipeRight(profile.user_id);
                             },
                             label: 'Swipe Right',
                           ),
@@ -96,6 +93,6 @@ class DiscoverPage extends StatelessWidget {
               );
             },
           );
-      }));
+        }));
   }
 }

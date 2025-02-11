@@ -1,5 +1,6 @@
 import '../data/auth_repository.dart';
 import '../core/shared_pref.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class AuthUseCase {
   final AuthRepository repository;
@@ -9,22 +10,28 @@ class AuthUseCase {
 
   Future<void> login(String username, String password) async {
     final tokens = await repository.login(username, password);
-    await sharedPrefs.saveTokens(tokens);
+    await sharedPrefs.saveTokensAndUserId(tokens);
   }
 
   Future<void> signup(
       String username, String password, String name, String phone) async {
     final tokens = await repository.signup(username, password, name, phone);
-    await sharedPrefs.saveTokens(tokens);
-  }
-
-  Future<void> logout() async {
-    await sharedPrefs.removeAccessToken();
-    await sharedPrefs.removeRefreshToken();
+    await sharedPrefs.saveTokensAndUserId(tokens);
   }
 
   Future<bool> isLoggedIn() async {
     final accessToken = await sharedPrefs.getAccessToken();
-    return accessToken != null;
+    if (accessToken == null) {
+      return false;
+    }
+    DateTime expirationDate = JwtDecoder.getExpirationDate(accessToken);
+    print(expirationDate);
+    if (JwtDecoder.isExpired(accessToken)) {
+      final isRefreshValid = await repository.refreshAccessToken();
+      if (!isRefreshValid) {
+        return false;
+      }
+    }
+    return true;
   }
 }

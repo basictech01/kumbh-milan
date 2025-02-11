@@ -42,7 +42,6 @@ class MyApp extends StatelessWidget {
       required this.sharedPrefs});
   @override
   Widget build(BuildContext context) {
-    // final languageProvider = Provider.of<LanguageProvider>(context);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider(authUseCase)),

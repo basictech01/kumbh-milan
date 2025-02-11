@@ -85,12 +85,8 @@ class AuthProvider extends ChangeNotifier {
     return false;
   }
 
-  Future<void> logout() async {
-    await authUseCase.logout();
-    notifyListeners();
-  }
-
   Future<bool> isLoggedIn() async {
+    print("isloggedin check");
     return await authUseCase.isLoggedIn();
   }
 }

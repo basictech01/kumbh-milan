@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kumbh_milap/core/model/profile_model.dart';
 import '../components/profile_additional_info.dart';
-import '../components/profile_button.dart';
 import '../components/profile_header.dart';
 import '../components/profile_info_section.dart';
 
@@ -52,13 +51,6 @@ class DetailPage extends StatelessWidget {
                   InterestsSection(
                     interests: profileModel.interests ?? [],
                     languages: profileModel.languages ?? [],
-                  ),
-                  const SizedBox(height: 30),
-                  ProfileButton(
-                    onPressed: () {
-                      // Handle profile update
-                    },
-                    label: 'Update Profile',
                   ),
                   const SizedBox(height: 30),
                 ],

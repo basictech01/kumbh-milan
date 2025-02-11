@@ -1,12 +1,15 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:kumbh_milap/core/model/profile_model.dart';
+import 'package:kumbh_milap/domain/auth_use.dart';
+import '../../core/shared_pref.dart';
 import '../../data/profile_repository.dart';
 import '../../domain/profile_photo_use.dart';
 
 class ProfileProvider with ChangeNotifier {
   final ProfileRepository _profileRepo = ProfileRepository();
   final UploadProfilePhoto _uploadPhotoUseCase = UploadProfilePhoto();
+  late final sharedPrefs = SharedPrefs();
 
   bool _isLoading = false;
   String? _error;
@@ -205,15 +208,23 @@ class ProfileProvider with ChangeNotifier {
     _isLoading = true;
     _error = null;
     notifyListeners();
-    // final userId = await SharedPrefs().getUserId();
+    print('getProfile');
     try {
       final response = await _profileRepo.getProfile();
       _profileModel = ProfileModel.fromJson(response['data']);
+      print(profileModel);
     } catch (e) {
       _error = e.toString();
     } finally {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> logout() async {
+    await sharedPrefs.removeAccessToken();
+    await sharedPrefs.removeRefreshToken();
+    await sharedPrefs.removeUserId();
+    notifyListeners();
   }
 }

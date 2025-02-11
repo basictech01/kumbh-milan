@@ -33,7 +33,12 @@ class DiscoverProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> swipeRight(String userId) async {
+  Future<void> swipeRight(int? userId) async {
+    if (userId == null) {
+      _errorMessage = 'User ID is null';
+      notifyListeners();
+      return;
+    }
     try {
       await swipeRepository.swipeRight(userId);
       _profiles.removeWhere((profile) => profile.user_id == userId);
@@ -44,7 +49,12 @@ class DiscoverProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> swipeLeft(String userId) async {
+  Future<void> swipeLeft(int? userId) async {
+    if (userId == null) {
+      _errorMessage = 'User ID is null';
+      notifyListeners();
+      return;
+    }
     try {
       await swipeRepository.swipeLeft(userId);
       _profiles.removeWhere((profile) => profile.user_id == userId);
