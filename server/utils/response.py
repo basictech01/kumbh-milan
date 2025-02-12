@@ -1,6 +1,6 @@
 from flask import jsonify
 
-from utils.result import Error
+from utils.error import Error
 
 
 class Response:

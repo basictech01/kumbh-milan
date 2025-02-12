@@ -5,7 +5,10 @@ MYSQL = {
     "password": "password",
     "port": 3306,
 }
-AZURE_STORAGE_CONNECTION_STRING = "xxxx"
+JWT_SECRET_KEY="mysecret"
 
+
+# these needs to be changed before running
+AZURE_STORAGE_CONNECTION_STRING = "xxxx"
 CONTAINER_NAME = "photos"
-AZURE_FILE_PREFIX = "https://kumbhmilap.blob.core.windows.net/photos/"
+AZURE_FILE_PREFIX = "https://anyprefix/photos/"

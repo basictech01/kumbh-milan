@@ -41,8 +41,8 @@ FOLLOWING is the truth table for the operation
 |   X      |    R     |     9     |
 |   L      |    L     |     6     |
 |   R      |    R     |     36    |
-|   L      |    R     |     12    |
-|   R      |    L     |     18    |
+|   L      |    R     |     18    |
+|   R      |    L     |     12    |
 """
 
 
@@ -85,6 +85,7 @@ def __filter_swiped_users(user_id, ids: list[int]) -> Result[list[int]]:
             swiped_ids = set()
             swiped_ids.add(user_id)  # Add the user itself
             for row in result:
+                # skipping the users for which user has only right swipe (they can be potential match)
                 if row["user_min_id"] == user_id and row["operation"] != 9:
                     swiped_ids.add(row["user_max_id"])
                 if row["user_max_id"] == user_id and row["operation"] != 4:
@@ -102,7 +103,18 @@ def __convert_to_profile(user: list[int]) -> Result[list[Profile]]:
             query = f"SELECT user_id, name, age, gender, home_town, language, occupation, education, \
                  sub_group, about, interests, looking_for, advice_to_younger_self, your_meaning_of_life, biggest_achievement, biggest_challenge, profile_picture_url FROM profile WHERE user_id in ({','.join(['%s' for _ in user])})"
             profile = connection.read(query, *user)
-            log.error(f"profile: {profile}")
+            return Result(success=True, value=[Profile(**p) for p in profile])
+    except Exception as e:
+        log.error(f"Error converting to profile: {e}")
+        return Result(success=False, error=DATABASE_ERROR)
+
+
+def __convert_to_profile_with_phone(user: list[int]) -> Result[list[Profile]]:
+    try:
+        with MySQLConnection() as connection:
+            query = f"SELECT user_id, profile.name as name, age, gender, home_town, language, occupation, education, user.phone as phone,  \
+                 sub_group, about, interests, looking_for, advice_to_younger_self, your_meaning_of_life, biggest_achievement, biggest_challenge, profile_picture_url FROM profile JOIN user where user.id= profile.user_id and user_id in ({','.join(['%s' for _ in user])})"
+            profile = connection.read(query, *user)
             return Result(success=True, value=[Profile(**p) for p in profile])
     except Exception as e:
         log.error(f"Error converting to profile: {e}")
@@ -123,7 +135,7 @@ def get_new_users_to_swipe(user_id, page_length) -> Result[list[Profile]]:
             ids = connection.read(query, user_id, offset, page_length)
             ids = [row["id"] for row in ids]
             filtered_user = __filter_swiped_users(user_id, ids)
-            if not filtered_user.success or not filtered_user.value:
+            if not filtered_user.success:
                 return Result(success=False, error=filtered_user.error)
             if not filtered_user.value:
                 return Result(success=True, value=[])
@@ -136,24 +148,52 @@ def get_new_users_to_swipe(user_id, page_length) -> Result[list[Profile]]:
         return Result(success=False, error=DATABASE_ERROR)
 
 
-def swipe_left(user_id, user_id_swiped) -> Result[bool]:
+def swipe_left(user_id, user_id_swiped):
     if user_id == user_id_swiped:
         return Result(success=False, error=INVALID_SWIPE)
     if user_id > user_id_swiped:
-        query = "INSERT INTO swipe (user_min_id, user_max_id, operation) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE operation = operation * %s"
+        query = "SELECT * from swipe WHERE user_min_id = %s and user_max_id = %s"
         try:
             with MySQLConnection() as connection:
-                connection.write(query, user_id_swiped, user_id, 3, 3)
-                return Result(success=True, value=True)
+                result = connection.read_one(query, user_id_swiped, user_id)
+                if result:
+                    if result["operation"] in [2, 4]:
+                        query = "UPDATE swipe SET operation = operation * 3 WHERE user_min_id = %s and user_max_id = %s"
+                        connection.write(query, user_id_swiped, user_id)
+                        return Result(success=True, value=True)
+                    if result["operation"] in [9, 18, 36]:
+                        query = "UPDATE swipe SET operation = operation / 3 WHERE user_min_id = %s and user_max_id = %s"
+                        connection.write(query, user_id_swiped, user_id)
+                        return Result(success=True, value=True)
+                    if result["operation"] in [3, 6, 12]:
+                        return Result(success=True, value=True)
+                else:
+                    query = "INSERT INTO swipe (user_min_id, user_max_id, operation) VALUES (%s, %s, %s)"
+                    connection.write(query, user_id_swiped, user_id, 3)
+                    return Result(success=True, value=True)
         except Exception as e:
             log.error(f"Error swiping left: {e}")
             return Result(success=False, error=DATABASE_ERROR)
     else:
-        query = "INSERT INTO swipe (user_min_id, user_max_id, operation) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE operation = operation * %s"
+        query = "SELECT * from swipe WHERE user_min_id = %s and user_max_id = %s"
         try:
             with MySQLConnection() as connection:
-                connection.write(query, user_id, user_id_swiped, 2, 2)
-                return Result(success=True, value=True)
+                result = connection.read_one(query, user_id, user_id_swiped)
+                if result:
+                    if result["operation"] in [3, 9]:
+                        query = "UPDATE swipe SET operation = operation * 2 WHERE user_min_id = %s and user_max_id = %s"
+                        connection.write(query, user_id, user_id_swiped)
+                        return Result(success=True, value=True)
+                    if result["operation"] in [4, 12, 36]:
+                        query = "UPDATE swipe SET operation = operation / 2 WHERE user_min_id = %s and user_max_id = %s"
+                        connection.write(query, user_id, user_id_swiped)
+                        return Result(success=True, value=True)
+                    if result["operation"] in [2, 6, 18]:
+                        return Result(success=True, value=True)
+                else:
+                    query = "INSERT INTO swipe (user_min_id, user_max_id, operation) VALUES (%s, %s, %s)"
+                    connection.write(query, user_id, user_id_swiped, 2)
+                    return Result(success=True, value=True)
         except Exception as e:
             log.error(f"Error swiping left: {e}")
             return Result(success=False, error=DATABASE_ERROR)
@@ -163,20 +203,48 @@ def swipe_right(user_id, user_id_swiped):
     if user_id == user_id_swiped:
         return Result(success=False, error=INVALID_SWIPE)
     if user_id > user_id_swiped:
-        query = "INSERT INTO swipe (user_min_id, user_max_id, operation) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE operation = operation * %s"
+        query = "SELECT * from swipe WHERE user_min_id = %s and user_max_id = %s"
         try:
             with MySQLConnection() as connection:
-                connection.write(query, user_id_swiped, user_id, 9, 9)
-                return Result(success=True, value=True)
+                result = connection.read_one(query, user_id_swiped, user_id)
+                if result:
+                    if result["operation"] in [2, 4]:
+                        query = "UPDATE swipe SET operation = operation * 9 WHERE user_min_id = %s and user_max_id = %s"
+                        connection.write(query, user_id_swiped, user_id)
+                        return Result(success=True, value=True)
+                    if result["operation"] in [3, 6, 12]:
+                        query = "UPDATE swipe SET operation = operation * 3 WHERE user_min_id = %s and user_max_id = %s"
+                        connection.write(query, user_id_swiped, user_id)
+                        return Result(success=True, value=True)
+                    if result["operation"] in [9, 18, 36]:
+                        return Result(success=True, value=True)
+                else:
+                    query = "INSERT INTO swipe (user_min_id, user_max_id, operation) VALUES (%s, %s, %s)"
+                    connection.write(query, user_id_swiped, user_id, 9)
+                    return Result(success=True, value=True)
         except Exception as e:
             log.error(f"Error swiping right: {e}")
             return Result(success=False, error=DATABASE_ERROR)
     else:
-        query = "INSERT INTO swipe (user_min_id, user_max_id, operation) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE operation = operation * %s"
+        query = "SELECT * from swipe WHERE user_min_id = %s and user_max_id = %s"
         try:
             with MySQLConnection() as connection:
-                connection.write(query, user_id, user_id_swiped, 4, 4)
-                return Result(success=True, value=True)
+                result = connection.read_one(query, user_id, user_id_swiped)
+                if result:
+                    if result["operation"] in [3, 9]:
+                        query = "UPDATE swipe SET operation = operation * 4 WHERE user_min_id = %s and user_max_id = %s"
+                        connection.write(query, user_id, user_id_swiped)
+                        return Result(success=True, value=True)
+                    if result["operation"] in [2, 6, 18]:
+                        query = "UPDATE swipe SET operation = operation * 2 WHERE user_min_id = %s and user_max_id = %s"
+                        connection.write(query, user_id, user_id_swiped)
+                        return Result(success=True, value=True)
+                    if result["operation"] in [4, 12, 36]:
+                        return Result(success=True, value=True)
+                else:
+                    query = "INSERT INTO swipe (user_min_id, user_max_id, operation) VALUES (%s, %s, %s)"
+                    connection.write(query, user_id, user_id_swiped, 4)
+                    return Result(success=True, value=True)
         except Exception as e:
             log.error(f"Error swiping right: {e}")
             return Result(success=False, error=DATABASE_ERROR)
@@ -209,8 +277,11 @@ def get_all_matched_users(user_id) -> Result[list[Profile]]:
             matched.extend([row["matched_user"] for row in result])
             if not matched:
                 return Result(success=True, value=[])
-            profiles = __convert_to_profile(matched)
-            return Result(success=True, value=profiles.value)
+            result = __convert_to_profile_with_phone(matched)
+            if result.success:
+                return Result(success=True, value=result.value)
+            return Result(success=False, error=result.error)
+
     except Exception as e:
         log.error(f"Error getting all matched users: {e}")
         return Result(success=False, error=DATABASE_ERROR)
@@ -225,8 +296,10 @@ def get_all_users_like(user_id) -> Result[list[Profile]]:
             liked.extend([row["liked_user"] for row in result])
             if not liked:
                 return Result(success=True, value=[])
-            profiles = __convert_to_profile(liked)
-            return Result(success=True, value=profiles.value)
+            result = __convert_to_profile(liked)
+            if not result.success:
+                return Result(success=False, error=result.error)
+            return Result(success=True, value=result.value)
     except Exception as e:
         log.error(f"Error getting all users liked: {e}")
         return Result(success=False, error=DATABASE_ERROR)

@@ -40,7 +40,7 @@ class DiscoverProvider extends ChangeNotifier {
       return;
     }
     try {
-      await swipeRepository.swipeRight(userId);
+      await swipeRepository.swipeRight(userId!.toString());
       _profiles.removeWhere((profile) => profile.user_id == userId);
       notifyListeners();
     } catch (e) {
@@ -56,7 +56,7 @@ class DiscoverProvider extends ChangeNotifier {
       return;
     }
     try {
-      await swipeRepository.swipeLeft(userId);
+      await swipeRepository.swipeLeft(userId!.toString());
       _profiles.removeWhere((profile) => profile.user_id == userId);
       notifyListeners();
     } catch (e) {

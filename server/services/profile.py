@@ -40,7 +40,7 @@ def get_profile(id) -> Result[Profile]:
         with MySQLConnection() as connection:
             profile = connection.read_one(query, id)
             if not profile:
-                return Result(success=False, error=PROFILE_NOT_FOUND)
+                return Result(success=True, value=Profile.empty_profile(id))
             profile.pop("created_at")
             profile.pop("updated_at")
             return Result(success=True, value=Profile(**profile))

@@ -18,6 +18,7 @@ class Profile:
         biggest_achievement,
         biggest_challenge,
         profile_picture_url,
+        phone=None,
     ):
         self.user_id = user_id
         self.name = name
@@ -36,6 +37,29 @@ class Profile:
         self.biggest_achievement = biggest_achievement
         self.biggest_challenge = biggest_challenge
         self.profile_picture_url = profile_picture_url
+        self.phone = phone
+
+    def empty_profile(user_id):
+        return Profile(
+            user_id=user_id,
+            name=None,
+            age=None,
+            gender=None,
+            home_town=None,
+            language=None,
+            occupation=None,
+            education=None,
+            sub_group=None,
+            about=None,
+            interests=None,
+            looking_for=None,
+            advice_to_younger_self=None,
+            your_meaning_of_life=None,
+            biggest_achievement=None,
+            biggest_challenge=None,
+            profile_picture_url=None,
+            phone=None,
+        )
 
     def to_dict(self):
         return {
@@ -55,5 +79,6 @@ class Profile:
             "your_meaning_of_life": self.your_meaning_of_life,
             "biggest_achievement": self.biggest_achievement,
             "biggest_challenge": self.biggest_challenge,
-            "profile_picture_url": self.profile_picture_url
+            "profile_picture_url": self.profile_picture_url,
+            "phone": self.phone,
         }

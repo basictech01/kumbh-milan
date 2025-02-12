@@ -3,14 +3,15 @@ from flask import Flask
 from routes.auth import auth
 from routes.profile import profile
 from routes.swipe import swipe
+from utils import config
 from utils.extensions import bcrypt, jwt
 from utils.logging import setup_logging
 
 app = Flask(__name__)
-app.config["JWT_SECRET_KEY"] = "supersecretkey"
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 86400
-app.config["JWT_REFRESH_TOKEN_EXPIRES"] = 365 * 24 * 60 * 60
-app.config["JWT_VERIFY_SUB"]=False
+app.config["JWT_SECRET_KEY"] = config.JWT_SECRET_KEY
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 60 * 60 * 24
+app.config["JWT_REFRESH_TOKEN_EXPIRES"] = 365 * 24 * 60 * 60 * 2
+app.config["JWT_VERIFY_SUB"] = False
 
 app.register_blueprint(auth, url_prefix="/auth")
 app.register_blueprint(profile, url_prefix="/profile")
