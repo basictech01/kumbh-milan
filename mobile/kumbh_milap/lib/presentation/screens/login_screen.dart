@@ -30,7 +30,7 @@ class LoginScreen extends StatelessWidget {
                   shape: BoxShape.rectangle,
                 ),
                 child: Center(
-                  child: Icon(Icons.person, size: 80, color: AppTheme.darkGray),
+                  child: Image.asset('assets/logo.png'),
                 ),
               ),
 

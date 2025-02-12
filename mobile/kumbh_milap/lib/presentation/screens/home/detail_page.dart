@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kumbh_milap/core/model/profile_model.dart';
-import '../components/discover_header';
-import '../components/name_component';
+import '../components/discover_header.dart';
+import '../components/name_component.dart';
 import '../components/profile_additional_info.dart';
 import '../components/profile_info_section.dart';
 

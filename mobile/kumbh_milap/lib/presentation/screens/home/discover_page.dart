@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kumbh_milap/presentation/screens/components/name_component';
 import 'package:provider/provider.dart';
 import 'package:kumbh_milap/presentation/providers/discover_provider.dart';
-import '../components/discover_header';
+import '../components/discover_header.dart';
+import '../components/name_component.dart';
 import '../components/profile_additional_info.dart';
 import '../components/profile_button.dart';
 import '../components/profile_info_section.dart';
