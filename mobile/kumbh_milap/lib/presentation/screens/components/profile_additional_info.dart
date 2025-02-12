@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../app_theme.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class InterestsSection extends StatelessWidget {
   final List<String> interests;
@@ -27,7 +28,7 @@ class InterestsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Interests & Languages',
+          '${AppLocalizations.of(context)!.interests} & ${AppLocalizations.of(context)!.prefLanguage}',
           style: Theme.of(context)
               .textTheme
               .displayMedium
@@ -46,12 +47,18 @@ class InterestsSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (filteredInterests.isNotEmpty)
-                  _buildChipSection(context, 'Interests', filteredInterests),
+                  _buildChipSection(
+                      context,
+                      AppLocalizations.of(context)!.interests,
+                      filteredInterests),
                 if (filteredInterests.isNotEmpty &&
                     filteredLanguages.isNotEmpty)
                   const SizedBox(height: 16),
                 if (filteredLanguages.isNotEmpty)
-                  _buildChipSection(context, 'Languages', filteredLanguages),
+                  _buildChipSection(
+                      context,
+                      AppLocalizations.of(context)!.langauge,
+                      filteredLanguages),
               ],
             ),
           ),

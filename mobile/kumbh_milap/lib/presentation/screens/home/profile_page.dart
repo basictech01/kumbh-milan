@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/profile_provider.dart';
+import '../components/error_box.dart';
 import '../components/profile_additional_info.dart';
 import '../components/profile_header.dart';
 import '../components/profile_info_section.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
@@ -19,11 +21,14 @@ class ProfilePage extends StatelessWidget {
           }
 
           if (profileProvider.error != null) {
-            return Center(child: Text(profileProvider.error!));
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              showErrorDialog(context, profileProvider.error!);
+            });
           }
 
           if (profile == null) {
-            return Center(child: Text('Profile not found'));
+            return Center(
+                child: Text(AppLocalizations.of(context)!.profileNotFound));
           }
 
           return Scaffold(
@@ -32,9 +37,10 @@ class ProfilePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ProfileHeader(
-                    profilePhoto:
-                        profile.profilePictureUrl ?? '/placeholder.jpg',
-                    name: profile.name ?? 'Unknown',
+                    profilePhoto: profile.profilePictureUrl ??
+                        "https://fastly.picsum.photos/id/1075/200/200.jpg?hmac=a9PcCsXBonPZ7LCLyWX6dHM1XGbcojML0qhnq-Ee4a4",
+                    name: AppLocalizations.of(context)!
+                        .welcomeUser(profile.name ?? "Unknown"),
                     isMatched: true,
                   ),
                   const SizedBox(height: 20),
@@ -44,24 +50,34 @@ class ProfilePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         InfoSection(
-                          title: 'Personal Information',
+                          title: AppLocalizations.of(context)!.personalInfo,
                           information: {
-                            'Age': profile.age?.toString(),
-                            'Gender': profile.gender,
-                            'Location': profile.home,
-                            'Occupation': profile.occupation,
-                            'Education': profile.education,
+                            AppLocalizations.of(context)!.age:
+                                profile.age?.toString(),
+                            AppLocalizations.of(context)!.gender:
+                                profile.gender,
+                            AppLocalizations.of(context)!.location:
+                                profile.home,
+                            AppLocalizations.of(context)!.occupation:
+                                profile.occupation,
+                            AppLocalizations.of(context)!.education:
+                                profile.education,
                           },
                         ),
                         const SizedBox(height: 20),
                         InfoSection(
-                          title: 'Additional Information',
+                          title: AppLocalizations.of(context)!.additionInfo,
                           information: {
-                            'Looking For': profile.lookingFor,
-                            'Advice': profile.advice,
-                            'Meaning of Life': profile.meaningOfLife,
-                            'Achievements': profile.achievements,
-                            'Challenges': profile.challenges,
+                            AppLocalizations.of(context)!.lookingFor:
+                                profile.lookingFor,
+                            AppLocalizations.of(context)!.advice:
+                                profile.advice,
+                            AppLocalizations.of(context)!.meaningOfLife:
+                                profile.meaningOfLife,
+                            AppLocalizations.of(context)!.achievements:
+                                profile.achievements,
+                            AppLocalizations.of(context)!.challenges:
+                                profile.challenges,
                           },
                         ),
                         const SizedBox(height: 20),
@@ -77,7 +93,7 @@ class ProfilePage extends StatelessWidget {
                               Navigator.of(context)
                                   .pushReplacementNamed('/login');
                             },
-                            child: Text('Logout'),
+                            child: Text(AppLocalizations.of(context)!.logout),
                           ),
                         ),
                         const SizedBox(height: 30),

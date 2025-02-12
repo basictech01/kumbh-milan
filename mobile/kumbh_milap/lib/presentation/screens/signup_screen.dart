@@ -4,6 +4,8 @@ import '../providers/auth_provider.dart';
 import 'package:kumbh_milap/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'components/error_box.dart';
+
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
@@ -134,11 +136,19 @@ class SignUpScreen extends StatelessWidget {
                   ? CircularProgressIndicator()
                   : ElevatedButton(
                       onPressed: () async {
+                        bool connected =
+                            await authProvider.checkInternetConnection(context);
+                        if (!connected) {
+                          showErrorDialog(context,
+                              AppLocalizations.of(context)!.networkError);
+                          return;
+                        }
                         bool success = await authProvider.signup(
                           authProvider.username,
                           authProvider.password,
                           authProvider.number,
                           authProvider.name,
+                          context,
                         );
                         if (success) {
                           // Navigate to home screen or next
@@ -146,13 +156,9 @@ class SignUpScreen extends StatelessWidget {
                               context, '/createProfile');
                         } else {
                           // Show error
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                authProvider.errorMessage.toString(),
-                              ),
-                            ),
-                          );
+                          showErrorDialog(
+                              context, authProvider.errorMessage.toString());
+                          return;
                         }
                       },
                       style: ElevatedButton.styleFrom(
