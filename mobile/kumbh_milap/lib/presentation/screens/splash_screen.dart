@@ -42,15 +42,24 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
       body: Center(
-        child: Text(
-          AppLocalizations.of(context)!.appName, // Localized app name
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).scaffoldBackgroundColor,
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/sadhu.png',
+              width: 240,
+              height: 240,
+            ),
+            Text(
+              AppLocalizations.of(context)!.appName, // Localized app name
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor,
+              ),
+            )
+          ],
         ),
       ),
     );

@@ -93,7 +93,7 @@ class AuthRepository {
       if (responseBody is Map && responseBody.containsKey('data')) {
         throw Exception(responseBody['data']['message'].toString());
       } else {
-        throw Exception('Failed to refresh access token');
+        return false;
       }
     }
   }

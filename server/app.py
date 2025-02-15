@@ -1,3 +1,5 @@
+import logging
+from logging.handlers import RotatingFileHandler
 from flask import Flask
 
 from routes.auth import auth
@@ -7,6 +9,7 @@ from utils import config
 from utils.extensions import bcrypt, jwt
 from utils.logging import setup_logging
 
+setup_logging()
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = config.JWT_SECRET_KEY
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 60 * 60 * 24

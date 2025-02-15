@@ -40,3 +40,4 @@ flutter:
   generate: true
   assets:
     - assets/logo.png
+    - assets/sadhu.png
