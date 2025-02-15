@@ -13,9 +13,9 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 60 * 60 * 24
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = 365 * 24 * 60 * 60 * 2
 app.config["JWT_VERIFY_SUB"] = False
 
-app.register_blueprint(auth, url_prefix="/auth")
-app.register_blueprint(profile, url_prefix="/profile")
-app.register_blueprint(swipe, url_prefix="/swipe")
+app.register_blueprint(auth, url_prefix="/api/auth")
+app.register_blueprint(profile, url_prefix="/api/profile")
+app.register_blueprint(swipe, url_prefix="/api/swipe")
 
 bcrypt = bcrypt.init_app(app)
 jwt.init_app(app)

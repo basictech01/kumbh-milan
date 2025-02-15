@@ -2,10 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:kumbh_milap/core/model/profile_model.dart';
+import 'package:kumbh_milap/utils/constants.dart';
 import '../core/shared_pref.dart';
 
 class ProfileRepository {
-  final String baseUrl = "http://10.0.2.2:3001/profile";
+  final String baseUrl = "$BACKEND_URL/profile";
 
   Future<Map<String, dynamic>> createProfile(ProfileModel profile) async {
     String? token = await SharedPrefs().getAccessToken();
