@@ -211,6 +211,8 @@
   "profileSuccess": "Profile createds successfully.",
   "invalidUsername": "Invalid username.",
   "likes": "Likes",
+  "doMatch": "Match Now",
+  "editProfile": "Edit Profile",
   "networkError": "Network error. Please check your internet connection and try again.",
   "noUsersFound": "No users found."
 }

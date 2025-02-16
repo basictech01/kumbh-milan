@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:kumbh_milap/core/model/profile_model.dart';
-import 'package:kumbh_milap/domain/auth_use.dart';
 import '../../core/shared_pref.dart';
 import '../../data/profile_repository.dart';
 import '../../domain/profile_photo_use.dart';
@@ -12,6 +11,7 @@ class ProfileProvider with ChangeNotifier {
   late final sharedPrefs = SharedPrefs();
 
   bool _isLoading = false;
+  bool _updateProfile = false;
   String? _error;
   Map<String, dynamic>? _profileData;
   ProfileModel? _profileModel;
@@ -53,6 +53,7 @@ class ProfileProvider with ChangeNotifier {
   List<String> get languages => _languages;
 
   bool get isLoading => _isLoading;
+  bool get updateProfile => _updateProfile;
   String? get error => _error;
   Map<String, dynamic>? get profileData => _profileData;
   ProfileModel? get profileModel => _profileModel;
@@ -147,6 +148,11 @@ class ProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateProfileVal() {
+    _updateProfile = true;
+    notifyListeners();
+  }
+
   //convert to profile model
   ProfileModel toProfileModel() {
     return ProfileModel(
@@ -168,18 +174,29 @@ class ProfileProvider with ChangeNotifier {
     );
   }
 
-  Future<void> createProfile() async {
+  Future<void> createOrUpdateProfile() async {
     _isLoading = true;
     _error = null;
     notifyListeners();
 
-    try {
-      await _profileRepo.createProfile(toProfileModel());
-    } catch (e) {
-      _error = e.toString();
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+    if (_updateProfile) {
+      try {
+        await _profileRepo.updateProfile(toProfileModel());
+      } catch (e) {
+        _error = e.toString();
+      } finally {
+        _isLoading = false;
+        notifyListeners();
+      }
+    } else {
+      try {
+        await _profileRepo.createProfile(toProfileModel());
+      } catch (e) {
+        _error = e.toString();
+      } finally {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 

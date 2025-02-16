@@ -43,6 +43,7 @@ class DiscoverPage extends StatelessWidget {
                       onDislikePressed: () {
                         discoverProvider.swipeLeft(profile.user_id);
                       },
+                      label: "Discover",
                     ),
                     const SizedBox(height: 30),
                     ProfileInfo(

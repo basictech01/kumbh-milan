@@ -20,12 +20,31 @@ class LanguageScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Container(
+              height: 180,
+              width: 180,
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                shape: BoxShape.rectangle,
+              ),
+              child: Center(
+                child: Image.asset(
+                  'assets/sadhu.png',
+                  width: 240,
+                  height: 240,
+                ),
+              ),
+            ),
+            SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
                 languageProvider.setLanguage('en');
                 Navigator.pushReplacement(
                     context, MaterialPageRoute(builder: (_) => LoginScreen()));
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).primaryColor,
+              ),
               child: Text("English"),
             ),
             ElevatedButton(
@@ -34,6 +53,9 @@ class LanguageScreen extends StatelessWidget {
                 Navigator.pushReplacement(
                     context, MaterialPageRoute(builder: (_) => LoginScreen()));
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).primaryColor,
+              ),
               child: Text("हिन्दी (Hindi)"),
             ),
           ],

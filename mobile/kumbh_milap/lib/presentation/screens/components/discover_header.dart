@@ -5,12 +5,14 @@ class DiscoverHeader extends StatelessWidget {
   final String profilePhoto;
   final VoidCallback onLikePressed;
   final VoidCallback onDislikePressed;
+  final String label;
 
   const DiscoverHeader({
     Key? key,
     required this.profilePhoto,
     required this.onLikePressed,
     required this.onDislikePressed,
+    required this.label,
   }) : super(key: key);
 
   @override
@@ -28,19 +30,22 @@ class DiscoverHeader extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       ),
-      child: Stack(
-        children: [
-          Align(
-            alignment: AlignmentDirectional(0.4, 1.25),
-            child:
-                DiscoverButton(onPressed: onDislikePressed, label: 'Connect'),
-          ),
-          Align(
-            alignment: AlignmentDirectional(-0.4, 1.25),
-            child: DiscoverButton(onPressed: onDislikePressed, label: 'Cross'),
-          ),
-        ],
-      ),
+      child: label != 'Liked'
+          ? Stack(
+              children: [
+                Align(
+                  alignment: AlignmentDirectional(0.4, 1.25),
+                  child: DiscoverButton(
+                      onPressed: onDislikePressed, label: 'Connect'),
+                ),
+                Align(
+                  alignment: AlignmentDirectional(-0.4, 1.25),
+                  child: DiscoverButton(
+                      onPressed: onDislikePressed, label: 'Cross'),
+                ),
+              ],
+            )
+          : null,
     );
   }
 }

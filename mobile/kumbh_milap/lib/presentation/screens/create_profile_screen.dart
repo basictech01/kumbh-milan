@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
 import '../providers/profile_provider.dart';
 import 'package:kumbh_milap/app_theme.dart';
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
@@ -452,7 +451,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                             size: 28, color: AppTheme.white)),
                     ElevatedButton(
                         onPressed: () async {
-                          await userProvider.createProfile();
+                          await userProvider.createOrUpdateProfile();
 
                           if (userProvider.error == null) {
                             ScaffoldMessenger.of(context).showSnackBar(

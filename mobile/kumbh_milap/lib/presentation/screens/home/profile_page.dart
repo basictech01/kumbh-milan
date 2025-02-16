@@ -73,20 +73,36 @@ class ProfilePage extends StatelessWidget {
                           profile.challenges,
                     },
                   ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.primaryColor),
-                      onPressed: () async {
-                        await profileProvider.logout();
-                        Navigator.of(context).pushReplacementNamed('/login');
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.logout,
-                        style: Theme.of(context).textTheme.labelLarge,
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: AppTheme.primaryColor),
+                        onPressed: () async {
+                          await profileProvider.logout();
+                          Navigator.of(context).pushReplacementNamed('/login');
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.logout,
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
                       ),
-                    ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: AppTheme.primaryColor),
+                        onPressed: () {
+                          //change profileProvider.updateProfile to true
+                          profileProvider.updateProfileVal();
+                          Navigator.of(context).pushNamed('/createProfile');
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.editProfile,
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

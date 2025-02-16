@@ -70,34 +70,45 @@ class Item extends StatelessWidget {
   Widget build(BuildContext context) {
     final Uri _url = Uri.parse("tel://${profileModel.phone}");
     return Card(
-        color: Theme.of(context).secondaryHeaderColor,
-        child: ListTile(
-          onTap: () => {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DetailPage(profileModel: profileModel),
-              ),
-            )
-          },
-          leading: CircleAvatar(
-            backgroundImage: NetworkImage(
-                profileModel.profilePictureUrl ?? "https://picsum.photos/200"),
+        elevation: 2,
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: ListTile(
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailPage(profileModel: profileModel),
+                ),
+              )
+            },
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(profileModel.profilePictureUrl ??
+                  "https://picsum.photos/200"),
+            ),
+            title: Text(
+              profileModel.name ?? "Unknown",
+              style: Theme.of(context)
+                  .textTheme
+                  .displayMedium
+                  ?.copyWith(color: AppTheme.black, fontSize: 18),
+            ),
+            subtitle: Text(
+              profileModel.home ?? "",
+              style: Theme.of(context)
+                  .textTheme
+                  .displayMedium
+                  ?.copyWith(color: AppTheme.black, fontSize: 14),
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: IconButton(
+                onPressed: () => launchUrl(_url),
+                icon: Icon(
+                  Icons.phone,
+                  color: Theme.of(context).primaryColor,
+                )),
           ),
-          title: Text(
-            profileModel.name ?? "Unknown",
-            style: Theme.of(context)
-                .textTheme
-                .labelLarge
-                ?.copyWith(color: AppTheme.black),
-          ),
-          subtitle: Text(
-            profileModel.home ?? "",
-            style: Theme.of(context).textTheme.labelMedium,
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: IconButton(
-              onPressed: () => launchUrl(_url), icon: Icon(Icons.phone)),
         ));
   }
 }

@@ -36,32 +36,35 @@ class ProfileInfo extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "${name ?? 'Unknown'}, ${age ?? ' '}",
-                      style: Theme.of(context)
-                          .textTheme
-                          .displayMedium
-                          ?.copyWith(color: AppTheme.black),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    if (name != null && age != null)
+                      Text(
+                        "${name ?? 'Unknown'}, ${age ?? ' '}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMedium
+                            ?.copyWith(color: AppTheme.black),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     const SizedBox(height: 5),
-                    Text(
-                      education ?? '',
-                      style: Theme.of(context)
-                          .textTheme
-                          .displayMedium
-                          ?.copyWith(fontSize: 14),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    if (education != null)
+                      Text(
+                        education ?? '',
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMedium
+                            ?.copyWith(fontSize: 14),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     const SizedBox(height: 5),
-                    Text(
-                      occupation ?? '',
-                      style: Theme.of(context)
-                          .textTheme
-                          .displayMedium
-                          ?.copyWith(fontSize: 14),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    if (occupation != null)
+                      Text(
+                        occupation ?? '',
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMedium
+                            ?.copyWith(fontSize: 14),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                   ],
                 ),
               ),
@@ -79,6 +82,8 @@ class ProfileInfo extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 5),
+          LocationBadge(location: location ?? ''),
           const SizedBox(height: 10),
           Container(
             height: 1,

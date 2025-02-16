@@ -27,11 +27,15 @@ class SignUpScreen extends StatelessWidget {
                 height: 180,
                 width: 180,
                 decoration: BoxDecoration(
-                  color: AppTheme.lightGray,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                   shape: BoxShape.rectangle,
                 ),
                 child: Center(
-                  child: Image.asset('assets/logo.png'),
+                  child: Image.asset(
+                    'assets/sadhu.png',
+                    width: 240,
+                    height: 240,
+                  ),
                 ),
               ),
 
