@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kumbh_milap/app_theme.dart';
 import 'package:kumbh_milap/presentation/screens/home/discover_page.dart';
 import 'package:kumbh_milap/presentation/screens/home/like_profile_page.dart';
 import 'package:kumbh_milap/presentation/screens/home/match_profile_page.dart';
 import 'package:kumbh_milap/presentation/screens/home/profile_page.dart';
-import 'package:provider/provider.dart';
-
-import '../../../core/model/profile_model.dart';
-import '../../providers/profile_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,6 +22,17 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void initState() {
+    super.initState();
+    // Make status bar transparent
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+  }
+
   static final List<Widget> _pages = <Widget>[
     LikeProfilePage(),
     DiscoverPage(),
@@ -34,15 +42,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      bottomNavigationBar:
-          BottomNavBar(currentIndex: _currentIndex, onTap: _onTap),
-      body: SafeArea(
-          child: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
-      )),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        bottomNavigationBar:
+            BottomNavBar(currentIndex: _currentIndex, onTap: _onTap),
+        body: IndexedStack(
+          index: _currentIndex,
+          children: _pages,
+        ),
+      ),
     );
   }
 }
@@ -57,7 +67,7 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      backgroundColor: Theme.of(context).secondaryHeaderColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       onTap: (index) {
         onTap(index);
       },

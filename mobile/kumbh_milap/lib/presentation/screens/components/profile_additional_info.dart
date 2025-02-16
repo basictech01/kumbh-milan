@@ -30,32 +30,25 @@ class InterestsSection extends StatelessWidget {
         Container(
           width: double.infinity,
           constraints: BoxConstraints(minWidth: double.infinity),
-          child: Card(
-            elevation: 2,
-            color: Theme.of(context).secondaryHeaderColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (filteredInterests.isNotEmpty)
-                    _buildChipSection(
-                        context,
-                        AppLocalizations.of(context)!.interests,
-                        filteredInterests),
-                  if (filteredInterests.isNotEmpty &&
-                      filteredLanguages.isNotEmpty)
-                    const SizedBox(height: 16),
-                  if (filteredLanguages.isNotEmpty)
-                    _buildChipSection(
-                        context,
-                        AppLocalizations.of(context)!.langauge,
-                        filteredLanguages),
-                ],
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (filteredInterests.isNotEmpty)
+                  _buildChipSection(
+                      context,
+                      AppLocalizations.of(context)!.interests,
+                      filteredInterests),
+                if (filteredInterests.isNotEmpty &&
+                    filteredLanguages.isNotEmpty)
+                  const SizedBox(height: 16),
+                if (filteredLanguages.isNotEmpty)
+                  _buildChipSection(
+                      context,
+                      AppLocalizations.of(context)!.prefLanguage,
+                      filteredLanguages),
+              ],
             ),
           ),
         ),
@@ -72,8 +65,8 @@ class InterestsSection extends StatelessWidget {
           title,
           style: Theme.of(context)
               .textTheme
-              .labelLarge
-              ?.copyWith(color: AppTheme.black),
+              .displayMedium
+              ?.copyWith(fontSize: 20, color: AppTheme.black),
         ),
         const SizedBox(height: 8),
         Wrap(
@@ -81,15 +74,28 @@ class InterestsSection extends StatelessWidget {
           runSpacing: 10,
           children: items.map((item) => _buildChip(context, item)).toList(),
         ),
+        const SizedBox(height: 5),
+        Container(
+          height: 1,
+          width: MediaQuery.of(context).size.width * 0.91,
+          color: AppTheme.lightGray,
+        ),
       ],
     );
   }
 
   Widget _buildChip(BuildContext context, String label) {
     return Chip(
-      label: Text(label, style: Theme.of(context).textTheme.labelLarge),
-      backgroundColor: AppTheme.secondaryColor,
+      label: Text(
+        label,
+        style: Theme.of(context)
+            .textTheme
+            .displayMedium
+            ?.copyWith(fontSize: 14, color: AppTheme.black),
+      ),
+      backgroundColor: AppTheme.white,
       padding: const EdgeInsets.symmetric(horizontal: 15),
+      side: BorderSide(color: Theme.of(context).primaryColor), // Added border
     );
   }
 }

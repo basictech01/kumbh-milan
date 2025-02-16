@@ -5,6 +5,7 @@ import 'package:kumbh_milap/presentation/providers/match_provider.dart';
 import 'package:kumbh_milap/presentation/screens/home/detail_page.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MatchProfilePage extends StatefulWidget {
   @override
@@ -18,24 +19,43 @@ class _MatchProfilePageState extends State<MatchProfilePage> {
       create: (_) => MatchProvider()..getMatches(),
       child: Builder(builder: (context) {
         final matchProvider = Provider.of<MatchProvider>(context);
-        switch (matchProvider.matchState) {
-          case MatchState.initial:
-            return Center(child: CircularProgressIndicator());
-          case MatchState.loading:
-            return Center(child: CircularProgressIndicator());
-          case MatchState.loaded:
-            return ListView.builder(
-              itemCount: matchProvider.matches.length,
-              itemBuilder: (context, index) {
-                final match = matchProvider.matches[index];
-                return Item(
-                  profileModel: match,
-                );
-              },
-            );
-          case MatchState.error:
-            return Center(child: Text('Error'));
-        }
+        return Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(top: 20),
+              child: Text(
+                AppLocalizations.of(context)!.match,
+                style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                      color: Colors.black,
+                    ),
+              ),
+            ),
+            Expanded(
+              child: Builder(builder: (context) {
+                switch (matchProvider.matchState) {
+                  case MatchState.initial:
+                    return Center(child: CircularProgressIndicator());
+                  case MatchState.loading:
+                    return Center(child: CircularProgressIndicator());
+                  case MatchState.loaded:
+                    return ListView.builder(
+                      itemCount: matchProvider.matches.length,
+                      itemBuilder: (context, index) {
+                        final match = matchProvider.matches[index];
+                        return Item(
+                          profileModel: match,
+                        );
+                      },
+                    );
+                  case MatchState.error:
+                    return Center(child: Text('Error'));
+                }
+              }),
+            ),
+          ],
+        );
       }),
     );
   }

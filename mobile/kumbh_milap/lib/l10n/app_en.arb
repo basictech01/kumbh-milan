@@ -123,7 +123,7 @@
   "@occupation": {
     "description": "Label for the occupation field"
   },
-  "lookingFor": "Looking For",
+  "lookingFor": "Looking For? ",
   "@lookingFor": {
     "description": "Label for the looking for field"
   },
@@ -131,7 +131,7 @@
   "@interests": {
     "description": "Label for the interests field"
   },
-  "advice": "Advice to your younger self",
+  "advice": "Advice to your younger self: ",
   "@advice": {
     "description": "Label for the advice field"
   },
@@ -139,7 +139,7 @@
   "@meaningOfLife": {
     "description": "Label for the meaning of life field"
   },
-  "achievements": "Your Biggest Achievements",
+  "achievements": "Your Biggest Achievements: ",
   "@achievements": {
     "description": "Label for the achievements field"
   },
@@ -193,7 +193,7 @@
   "@swipeRight": {
     "description": "Text for the swipe right"
   },
-  "match": "Match",
+  "match": "Matches",
   "@match": {
     "description": "Text for the match"
   },
@@ -210,6 +210,7 @@
   "weakPassword": "The password is too weak.",
   "profileSuccess": "Profile createds successfully.",
   "invalidUsername": "Invalid username.",
+  "likes": "Likes",
   "networkError": "Network error. Please check your internet connection and try again.",
   "noUsersFound": "No users found."
 }

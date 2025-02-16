@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kumbh_milap/presentation/screens/components/profile_info.dart';
 import 'package:provider/provider.dart';
 import 'package:kumbh_milap/presentation/providers/discover_provider.dart';
 import '../components/discover_header.dart';
-import '../components/name_component.dart';
 import '../components/profile_additional_info.dart';
-import '../components/profile_button.dart';
 import '../components/profile_info_section.dart';
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
@@ -32,72 +31,49 @@ class DiscoverPage extends StatelessWidget {
             itemBuilder: (context, index) {
               final profile = profiles[index];
               return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ProfileName(
-                        name: profile.name ?? "Unkknown",
-                        age: profile.age,
-                      ),
-                      DiscoverHeader(
-                        profilePhoto: profile.profilePictureUrl ??
-                            'https://www.piclumen.com/wp-content/uploads/2024/10/piclumen-upscale-after.webp',
-                        location: profile.home ?? "N/A",
-                      ),
-                      const SizedBox(height: 20),
-                      InfoSection(
-                        title: AppLocalizations.of(context)!.personalInfo,
-                        information: {
-                          AppLocalizations.of(context)!.gender: profile.gender,
-                          AppLocalizations.of(context)!.occupation:
-                              profile.occupation,
-                          AppLocalizations.of(context)!.education:
-                              profile.education,
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      InfoSection(
-                        title: AppLocalizations.of(context)!.additionInfo,
-                        information: {
-                          AppLocalizations.of(context)!.lookingFor:
-                              profile.lookingFor,
-                          AppLocalizations.of(context)!.advice: profile.advice,
-                          AppLocalizations.of(context)!.meaningOfLife:
-                              profile.meaningOfLife,
-                          AppLocalizations.of(context)!.achievements:
-                              profile.achievements,
-                          AppLocalizations.of(context)!.challenges:
-                              profile.challenges,
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      InterestsSection(
-                        interests: profile.interests ?? [],
-                        languages: profile.languages ?? [],
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ProfileButton(
-                            onPressed: () {
-                              discoverProvider.swipeLeft(profile.user_id);
-                            },
-                            label: AppLocalizations.of(context)!.swipeLeft,
-                          ),
-                          SizedBox(width: 10),
-                          ProfileButton(
-                            onPressed: () {
-                              discoverProvider.swipeRight(profile.user_id);
-                            },
-                            label: AppLocalizations.of(context)!.swipeRight,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    DiscoverHeader(
+                      profilePhoto: profile.profilePictureUrl ??
+                          'https://www.piclumen.com/wp-content/uploads/2024/10/piclumen-upscale-after.webp',
+                      onLikePressed: () {
+                        discoverProvider.swipeRight(profile.user_id);
+                      },
+                      onDislikePressed: () {
+                        discoverProvider.swipeLeft(profile.user_id);
+                      },
+                    ),
+                    const SizedBox(height: 30),
+                    ProfileInfo(
+                      name: profile.name,
+                      age: profile.age,
+                      gender: profile.gender,
+                      education: profile.education,
+                      occupation: profile.occupation,
+                      location: profile.home,
+                      subGroup: profile.subgroup,
+                    ),
+                    const SizedBox(height: 10),
+                    InterestsSection(
+                      interests: profile.interests ?? [],
+                      languages: profile.languages ?? [],
+                    ),
+                    InfoSection(
+                      title: AppLocalizations.of(context)!.additionInfo,
+                      information: {
+                        AppLocalizations.of(context)!.lookingFor:
+                            profile.lookingFor,
+                        AppLocalizations.of(context)!.advice: profile.advice,
+                        AppLocalizations.of(context)!.meaningOfLife:
+                            profile.meaningOfLife,
+                        AppLocalizations.of(context)!.achievements:
+                            profile.achievements,
+                        AppLocalizations.of(context)!.challenges:
+                            profile.challenges,
+                      },
+                    ),
+                  ],
                 ),
               );
             },

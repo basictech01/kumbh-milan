@@ -3,6 +3,7 @@ import 'package:kumbh_milap/core/model/profile_model.dart';
 import 'package:kumbh_milap/presentation/providers/like_provider.dart';
 import 'package:kumbh_milap/presentation/screens/home/detail_page.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LikeProfilePage extends StatelessWidget {
   @override
@@ -11,30 +12,43 @@ class LikeProfilePage extends StatelessWidget {
       create: (_) => LikeProvider()..getMatches(),
       child: Builder(builder: (context) {
         final likeProvider = Provider.of<LikeProvider>(context);
-        switch (likeProvider.likeState) {
-          case LikeState.initial:
-            return Center(child: CircularProgressIndicator());
-          case LikeState.loading:
-            return Center(child: CircularProgressIndicator());
-          case LikeState.loaded:
-            return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // 2 columns
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 1.0, // Adjust item size ratio
+        return Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(top: 20),
+              child: Text(
+                AppLocalizations.of(context)!.likes,
+                style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                      color: Colors.black,
+                    ),
               ),
-              itemCount: likeProvider.matches.length,
-              itemBuilder: (context, index) {
-                final match = likeProvider.matches[index];
-                return MatchCard(
-                  profileModel: match,
-                );
+            ),
+            Expanded(
+              child: switch (likeProvider.likeState) {
+                LikeState.initial => Center(child: CircularProgressIndicator()),
+                LikeState.loading => Center(child: CircularProgressIndicator()),
+                LikeState.loaded => GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // 2 columns
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: 1.0, // Adjust item size ratio
+                    ),
+                    itemCount: likeProvider.matches.length,
+                    itemBuilder: (context, index) {
+                      final match = likeProvider.matches[index];
+                      return MatchCard(
+                        profileModel: match,
+                      );
+                    },
+                  ),
+                LikeState.error => Center(child: Text('Error'))
               },
-            );
-          case LikeState.error:
-            return Center(child: Text('Error'));
-        }
+            )
+          ],
+        );
       }),
     );
   }

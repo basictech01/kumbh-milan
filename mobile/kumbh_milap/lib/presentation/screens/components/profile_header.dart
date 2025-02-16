@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kumbh_milap/presentation/screens/components/discover_button.dart';
 
-class DiscoverHeader extends StatelessWidget {
+class ProfileHeader extends StatelessWidget {
   final String profilePhoto;
-  final VoidCallback onLikePressed;
-  final VoidCallback onDislikePressed;
 
-  const DiscoverHeader({
+  const ProfileHeader({
     Key? key,
     required this.profilePhoto,
-    required this.onLikePressed,
-    required this.onDislikePressed,
   }) : super(key: key);
 
   @override
@@ -27,19 +23,6 @@ class DiscoverHeader extends StatelessWidget {
           image: NetworkImage(profilePhoto),
           fit: BoxFit.cover,
         ),
-      ),
-      child: Stack(
-        children: [
-          Align(
-            alignment: AlignmentDirectional(0.4, 1.25),
-            child:
-                DiscoverButton(onPressed: onDislikePressed, label: 'Connect'),
-          ),
-          Align(
-            alignment: AlignmentDirectional(-0.4, 1.25),
-            child: DiscoverButton(onPressed: onDislikePressed, label: 'Cross'),
-          ),
-        ],
       ),
     );
   }

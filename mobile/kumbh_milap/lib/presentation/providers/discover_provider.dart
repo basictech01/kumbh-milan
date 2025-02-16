@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:either_dart/either.dart';
-import 'package:kumbh_milap/core/error.dart';
 import 'package:kumbh_milap/core/model/profile_model.dart';
 import '../../data/swipe_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
