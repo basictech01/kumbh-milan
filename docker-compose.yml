@@ -9,6 +9,7 @@ services:
       - "3001:3001/tcp"
     volumes:
       - "./server:/home/app/server"
+      - "./logs:/var"
     restart: unless-stopped
     env_file:
       - "./server/.env"

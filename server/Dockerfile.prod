@@ -1,0 +1,25 @@
+# Use a minimal Python image
+FROM python:3.13-alpine
+
+# Set environment variables for security
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy only the requirements file first (for caching layers)
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose the Flask port (default: 5000)
+EXPOSE 5000
+
+# Run the Flask app with Gunicorn
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]

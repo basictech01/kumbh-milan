@@ -7,6 +7,10 @@ def setup_logging():
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         handlers=[
             logging.StreamHandler(),  # Logs will be shown in the console
-            logging.FileHandler("server.log", mode="a"),  # Also write logs to a file
+            logging.FileHandler("/var/server.log", mode="a"),  # Also write logs to a file
         ],
     )
+
+
+
+
