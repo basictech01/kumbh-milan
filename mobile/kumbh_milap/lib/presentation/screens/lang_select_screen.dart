@@ -45,7 +45,7 @@ class LanguageScreen extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).primaryColor,
               ),
-              child: Text("English"),
+              child: Text("English", style: TextStyle(color: Colors.white)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -56,7 +56,8 @@ class LanguageScreen extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).primaryColor,
               ),
-              child: Text("हिन्दी (Hindi)"),
+              child:
+                  Text("हिन्दी (Hindi)", style: TextStyle(color: Colors.white)),
             ),
           ],
         ),

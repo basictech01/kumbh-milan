@@ -79,7 +79,11 @@ class Item extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DetailPage(profileModel: profileModel),
+                  builder: (context) => DetailPage(
+                    profileModel: profileModel,
+                    label: 'Match',
+                    onPressed: () => launchUrl(_url),
+                  ),
                 ),
               )
             },

@@ -8,8 +8,14 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class DetailPage extends StatelessWidget {
   final ProfileModel profileModel;
-
-  const DetailPage({Key? key, required this.profileModel}) : super(key: key);
+  final String label;
+  final VoidCallback onPressed;
+  const DetailPage({
+    Key? key,
+    required this.profileModel,
+    required this.label,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +63,15 @@ class DetailPage extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor),
-                onPressed: () {},
+                    backgroundColor: Theme.of(context).primaryColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    minimumSize: const Size(200, 45)),
+                onPressed: onPressed,
                 child: Text(
-                  AppLocalizations.of(context)!.doMatch,
+                  label == 'Likes'
+                      ? AppLocalizations.of(context)!.doMatch
+                      : AppLocalizations.of(context)!.callNow,
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
               ),

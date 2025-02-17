@@ -45,7 +45,24 @@ class DiscoverHeader extends StatelessWidget {
                 ),
               ],
             )
-          : null,
+          : Stack(
+              children: [
+                Align(
+                  alignment: AlignmentDirectional(-0.97, -0.85),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: Icon(Icons.arrow_back,
+                          color: Theme.of(context).primaryColor),
+                    ),
+                  ),
+                )
+              ],
+            ),
     );
   }
 }

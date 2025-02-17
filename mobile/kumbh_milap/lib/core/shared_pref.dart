@@ -1,5 +1,6 @@
-import 'dart:ffi';
+import 'dart:convert';
 
+import 'package:kumbh_milap/core/model/profile_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefs {
@@ -68,5 +69,19 @@ class SharedPrefs {
   Future<void> removeUserId() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_userIdKey);
+  }
+
+  Future<void> saveProfile(ProfileModel profile) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('profile', jsonEncode(profile.toJson()));
+  }
+
+  Future<ProfileModel?> getProfile() async {
+    final prefs = await SharedPreferences.getInstance();
+    final profileString = prefs.getString('profile');
+    if (profileString != null) {
+      return ProfileModel.fromJson(jsonDecode(profileString));
+    }
+    return null;
   }
 }

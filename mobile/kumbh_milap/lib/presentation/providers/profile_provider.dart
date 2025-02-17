@@ -244,4 +244,14 @@ class ProfileProvider with ChangeNotifier {
     await sharedPrefs.removeUserId();
     notifyListeners();
   }
+
+  Future<void> saveProfile() async {
+    await sharedPrefs.saveProfile(profileModel!);
+    notifyListeners();
+  }
+
+  Future<void> getProfileFromSharedPref() async {
+    _profileModel = await sharedPrefs.getProfile();
+    notifyListeners();
+  }
 }

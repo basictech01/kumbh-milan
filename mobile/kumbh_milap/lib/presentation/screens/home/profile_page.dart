@@ -3,7 +3,6 @@ import 'package:kumbh_milap/app_theme.dart';
 import 'package:kumbh_milap/presentation/screens/components/profile_header.dart';
 import 'package:provider/provider.dart';
 import '../../providers/profile_provider.dart';
-import '../components/discover_header.dart';
 import '../components/error_box.dart';
 import '../components/profile_info.dart';
 import '../components/profile_additional_info.dart';
@@ -79,7 +78,10 @@ class ProfilePage extends StatelessWidget {
                     children: [
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: AppTheme.primaryColor),
+                            backgroundColor: Theme.of(context).primaryColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            minimumSize: const Size(150, 45)),
                         onPressed: () async {
                           await profileProvider.logout();
                           Navigator.of(context).pushReplacementNamed('/login');
@@ -91,10 +93,12 @@ class ProfilePage extends StatelessWidget {
                       ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: AppTheme.primaryColor),
+                            backgroundColor: Theme.of(context).primaryColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            minimumSize: const Size(150, 45)),
                         onPressed: () {
                           //change profileProvider.updateProfile to true
-                          profileProvider.updateProfileVal();
                           Navigator.of(context).pushNamed('/createProfile');
                         },
                         child: Text(
