@@ -8,6 +8,7 @@ import 'package:kumbh_milap/presentation/screens/create_profile_screen.dart';
 import 'package:kumbh_milap/presentation/screens/home/home_screen.dart';
 import 'package:kumbh_milap/presentation/screens/login_screen.dart';
 import 'package:kumbh_milap/presentation/screens/signup_screen.dart';
+import 'package:kumbh_milap/presentation/screens/update_profile.dart';
 import 'package:provider/provider.dart';
 import 'core/shared_pref.dart';
 import 'data/auth_repository.dart';
@@ -45,7 +46,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider(authUseCase)),
-        ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) {
           final provider = LanguageProvider(sharedPrefs);
           provider.loadLanguage();
@@ -73,9 +73,12 @@ class MyApp extends StatelessWidget {
               "/login": (context) => const LoginScreen(),
               "/signup": (context) => const SignUpScreen(),
               "/home": (context) => const HomeScreen(),
-              "/createProfile": (context) => const CreateProfileScreen(),
+              "/createProfile": (context) => CreateProfileScreen(),
               "/splash": (context) => const SplashScreen(),
               "/langSelect": (context) => LanguageScreen(),
+              "/updateProfile": (context) => UpdateProfileScreen(
+                    userProvider: ProfileProvider(),
+                  ),
             },
           );
         },

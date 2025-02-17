@@ -33,30 +33,81 @@ class _MatchProfilePageState extends State<MatchProfilePage> {
               ),
             ),
             Expanded(
-              child: Builder(builder: (context) {
-                switch (matchProvider.matchState) {
-                  case MatchState.initial:
-                    return Center(child: CircularProgressIndicator());
-                  case MatchState.loading:
-                    return Center(child: CircularProgressIndicator());
-                  case MatchState.loaded:
-                    return ListView.builder(
-                      itemCount: matchProvider.matches.length,
-                      itemBuilder: (context, index) {
-                        final match = matchProvider.matches[index];
-                        return Item(
-                          profileModel: match,
-                        );
-                      },
-                    );
-                  case MatchState.error:
-                    return Center(child: Text('Error'));
-                }
-              }),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await matchProvider.getMatches();
+                },
+                backgroundColor: AppTheme.primaryColor,
+                color: AppTheme.white,
+                child: Builder(builder: (context) {
+                  return switch (matchProvider.matchState) {
+                    MatchState.initial =>
+                      _buildLoadingOrError(child: CircularProgressIndicator()),
+                    MatchState.loading =>
+                      _buildLoadingOrError(child: CircularProgressIndicator()),
+                    MatchState.loaded => matchProvider.matches.isEmpty
+                        ? _buildEmptyState(context)
+                        : ListView.builder(
+                            itemCount: matchProvider.matches.length,
+                            itemBuilder: (context, index) {
+                              final match = matchProvider.matches[index];
+                              return Item(
+                                profileModel: match,
+                              );
+                            },
+                          ),
+                    MatchState.error => _buildLoadingOrError(
+                        child: Text(AppLocalizations.of(context)!.error))
+                  };
+                }),
+              ),
             ),
           ],
         );
       }),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.7,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/sadhu.png',
+              height: 200,
+              width: 200,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              AppLocalizations.of(context)!.noMatchesFound,
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.pullToRefresh,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingOrError({required Widget child}) {
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Container(
+        height: 500, // Arbitrary height to ensure scrollability
+        child: Center(child: child),
+      ),
     );
   }
 }
@@ -70,7 +121,7 @@ class Item extends StatelessWidget {
   Widget build(BuildContext context) {
     final Uri _url = Uri.parse("tel://${profileModel.phone}");
     return Card(
-        elevation: 2,
+        elevation: 0,
         color: Theme.of(context).scaffoldBackgroundColor,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -81,15 +132,17 @@ class Item extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => DetailPage(
                     profileModel: profileModel,
-                    label: 'Match',
+                    labelPage: 'Match',
                     onPressed: () => launchUrl(_url),
                   ),
                 ),
               )
             },
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(profileModel.profilePictureUrl ??
-                  "https://picsum.photos/200"),
+              backgroundImage: profileModel.profilePictureUrl != null
+                  ? NetworkImage(profileModel.profilePictureUrl ??
+                      "https://picsum.photos/200")
+                  : AssetImage("assets/sadhu.png"),
             ),
             title: Text(
               profileModel.name ?? "Unknown",

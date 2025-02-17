@@ -208,12 +208,17 @@
   "signupFailed": "Signup failed. Please check your details and try again.",
   "emailAlreadyInUse": "This email address is already in use.",
   "weakPassword": "The password is too weak.",
-  "profileSuccess": "Profile createds successfully.",
+  "profileSuccess": "Profile created successfully.",
   "invalidUsername": "Invalid username.",
   "likes": "Likes",
+  "noLikesFound": "No likes yet",
+  "noMatchesFound": "No matches found yet",
   "doMatch": "Match Now",
+  "noProfilesFound": "No profiles found",
+  "pullToRefresh": "Pull down to refresh",
   "editProfile": "Edit Profile",
   "callNow": "Call Now",
+  "next": "Next",
   "networkError": "Network error. Please check your internet connection and try again.",
   "noUsersFound": "No users found."
 }

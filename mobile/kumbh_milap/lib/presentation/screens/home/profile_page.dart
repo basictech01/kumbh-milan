@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kumbh_milap/app_theme.dart';
 import 'package:kumbh_milap/presentation/screens/components/profile_header.dart';
 import 'package:provider/provider.dart';
 import '../../providers/profile_provider.dart';
@@ -16,10 +15,10 @@ class ProfilePage extends StatelessWidget {
       create: (_) => ProfileProvider()..getProfile(),
       child: Consumer<ProfileProvider>(
         builder: (context, profileProvider, child) {
-          final profile = profileProvider.profileModel;
-
           if (profileProvider.isLoading) {
-            return Center(child: CircularProgressIndicator());
+            return _buildLoadingOrError(
+              child: CircularProgressIndicator(),
+            );
           }
 
           if (profileProvider.error != null) {
@@ -28,91 +27,159 @@ class ProfilePage extends StatelessWidget {
             });
           }
 
-          if (profile == null) {
-            return Center(
-                child: Text(AppLocalizations.of(context)!.profileNotFound));
+          if (profileProvider.profileModel == null) {
+            return _buildEmptyState(context);
           }
 
+          final profile = profileProvider.profileModel!;
+
           return Scaffold(
-            body: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ProfileHeader(
-                    profilePhoto: profile.profilePictureUrl ??
-                        'https://www.piclumen.com/wp-content/uploads/2024/10/piclumen-upscale-after.webp',
-                  ),
-                  const SizedBox(height: 30),
-                  ProfileInfo(
-                    name: profile.name,
-                    age: profile.age,
-                    gender: profile.gender,
-                    education: profile.education,
-                    occupation: profile.occupation,
-                    location: profile.home,
-                    subGroup: profile.subgroup,
-                  ),
-                  const SizedBox(height: 10),
-                  InterestsSection(
-                    interests: profile.interests ?? [],
-                    languages: profile.languages ?? [],
-                  ),
-                  const SizedBox(height: 20),
-                  InfoSection(
-                    title: AppLocalizations.of(context)!.additionInfo,
-                    information: {
-                      AppLocalizations.of(context)!.lookingFor:
-                          profile.lookingFor,
-                      AppLocalizations.of(context)!.advice: profile.advice,
-                      AppLocalizations.of(context)!.meaningOfLife:
-                          profile.meaningOfLife,
-                      AppLocalizations.of(context)!.achievements:
-                          profile.achievements,
-                      AppLocalizations.of(context)!.challenges:
-                          profile.challenges,
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            minimumSize: const Size(150, 45)),
-                        onPressed: () async {
-                          await profileProvider.logout();
-                          Navigator.of(context).pushReplacementNamed('/login');
-                        },
-                        child: Text(
-                          AppLocalizations.of(context)!.logout,
-                          style: Theme.of(context).textTheme.labelLarge,
+            body: RefreshIndicator(
+              onRefresh: () async {
+                await profileProvider.getProfile();
+              },
+              color: Theme.of(context).scaffoldBackgroundColor,
+              backgroundColor: Theme.of(context).primaryColor,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ProfileHeader(
+                      profilePhoto: profile.profilePictureUrl,
+                      location: profile.home,
+                    ),
+                    const SizedBox(height: 30),
+                    ProfileInfo(
+                      name: profile.name,
+                      age: profile.age,
+                      gender: profile.gender,
+                      education: profile.education,
+                      occupation: profile.occupation,
+                      subGroup: profile.subgroup,
+                    ),
+                    const SizedBox(height: 10),
+                    InterestsSection(
+                      interests: profile.interests ?? [],
+                      languages: profile.languages ?? [],
+                    ),
+                    InfoSection(information: {
+                      AppLocalizations.of(context)!.bio: profile.about,
+                    }),
+                    const SizedBox(height: 20),
+                    InfoSection(
+                      title: AppLocalizations.of(context)!.additionInfo,
+                      information: {
+                        AppLocalizations.of(context)!.lookingFor:
+                            profile.lookingFor,
+                        AppLocalizations.of(context)!.advice: profile.advice,
+                        AppLocalizations.of(context)!.meaningOfLife:
+                            profile.meaningOfLife,
+                        AppLocalizations.of(context)!.achievements:
+                            profile.achievements,
+                        AppLocalizations.of(context)!.challenges:
+                            profile.challenges,
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(context).primaryColor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              minimumSize: const Size(150, 45)),
+                          onPressed: () async {
+                            await profileProvider.logout();
+                            Navigator.of(context)
+                                .pushReplacementNamed('/login');
+                          },
+                          child: Text(
+                            AppLocalizations.of(context)!.logout,
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
                         ),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            minimumSize: const Size(150, 45)),
-                        onPressed: () {
-                          //change profileProvider.updateProfile to true
-                          Navigator.of(context).pushNamed('/createProfile');
-                        },
-                        child: Text(
-                          AppLocalizations.of(context)!.editProfile,
-                          style: Theme.of(context).textTheme.labelLarge,
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(context).primaryColor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              minimumSize: const Size(150, 45)),
+                          onPressed: () async {
+                            //change profileProvider.updateProfile to true
+                            await profileProvider.fillProfileFromSharedPref();
+                            //pass provider to updateProfile screen
+                            Navigator.of(context).pushNamed('/updateProfile',
+                                arguments: profileProvider);
+                          },
+                          child: Text(
+                            AppLocalizations.of(context)!.editProfile,
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildLoadingOrError({required Widget child}) {
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: () async {},
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Container(
+            height: 500,
+            child: Center(child: child),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: () async {},
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/sadhu.png',
+                  height: 200,
+                  width: 200,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  AppLocalizations.of(context)!.profileNotFound,
+                  style: Theme.of(context).textTheme.titleLarge,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  AppLocalizations.of(context)!.pullToRefresh,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.grey,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

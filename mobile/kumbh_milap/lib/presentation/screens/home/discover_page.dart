@@ -11,32 +11,37 @@ class DiscoverPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (_) => DiscoverProvider()..fetchProfiles(context),
-        child: Builder(builder: (context) {
-          final discoverProvider = Provider.of<DiscoverProvider>(context);
+      create: (_) => DiscoverProvider()..fetchProfiles(context),
+      child: Builder(builder: (context) {
+        final discoverProvider = Provider.of<DiscoverProvider>(context);
 
+        Widget buildContent() {
           if (discoverProvider.isLoading) {
-            return Center(child: CircularProgressIndicator());
+            return _buildLoadingOrError(child: CircularProgressIndicator());
           }
 
           if (discoverProvider.errorMessage != null) {
-            return Center(child: Text(discoverProvider.errorMessage!));
+            return _buildLoadingOrError(
+                child: Text(discoverProvider.errorMessage!));
           }
 
           final profiles = discoverProvider.profiles;
-          print(profiles);
+
+          if (profiles.isEmpty) {
+            return _buildEmptyState(context);
+          }
 
           return PageView.builder(
             itemCount: profiles.length,
             itemBuilder: (context, index) {
               final profile = profiles[index];
               return SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     DiscoverHeader(
-                      profilePhoto: profile.profilePictureUrl ??
-                          'https://www.piclumen.com/wp-content/uploads/2024/10/piclumen-upscale-after.webp',
+                      profilePhoto: profile.profilePictureUrl,
                       onLikePressed: () {
                         discoverProvider.swipeRight(profile.user_id);
                       },
@@ -44,6 +49,8 @@ class DiscoverPage extends StatelessWidget {
                         discoverProvider.swipeLeft(profile.user_id);
                       },
                       label: "Discover",
+                      location: profile.home,
+                      onActionButtonPressed: () {},
                     ),
                     const SizedBox(height: 30),
                     ProfileInfo(
@@ -52,7 +59,6 @@ class DiscoverPage extends StatelessWidget {
                       gender: profile.gender,
                       education: profile.education,
                       occupation: profile.occupation,
-                      location: profile.home,
                       subGroup: profile.subgroup,
                     ),
                     const SizedBox(height: 10),
@@ -60,6 +66,10 @@ class DiscoverPage extends StatelessWidget {
                       interests: profile.interests ?? [],
                       languages: profile.languages ?? [],
                     ),
+                    const SizedBox(height: 10),
+                    InfoSection(information: {
+                      AppLocalizations.of(context)!.bio: profile.about,
+                    }),
                     InfoSection(
                       title: AppLocalizations.of(context)!.additionInfo,
                       information: {
@@ -79,6 +89,60 @@ class DiscoverPage extends StatelessWidget {
               );
             },
           );
-        }));
+        }
+
+        return RefreshIndicator(
+          onRefresh: () async {
+            await discoverProvider.fetchProfiles(context);
+          },
+          color: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: Theme.of(context).primaryColor,
+          child: buildContent(),
+        );
+      }),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.7,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/sadhu.png',
+              height: 200,
+              width: 200,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              AppLocalizations.of(context)!.noProfilesFound,
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.pullToRefresh,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingOrError({required Widget child}) {
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Container(
+        height: 500,
+        child: Center(child: child),
+      ),
+    );
   }
 }

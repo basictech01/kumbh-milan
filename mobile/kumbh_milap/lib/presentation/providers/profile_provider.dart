@@ -59,7 +59,7 @@ class ProfileProvider with ChangeNotifier {
   ProfileModel? get profileModel => _profileModel;
 
   void updateUsername(String value) {
-    _username = value.isNotEmpty ? value : null;
+    _username = value.isNotEmpty ? value.toLowerCase() : null;
     notifyListeners();
   }
 
@@ -229,6 +229,7 @@ class ProfileProvider with ChangeNotifier {
     try {
       final response = await _profileRepo.getProfile();
       _profileModel = ProfileModel.fromJson(response['data']);
+      await sharedPrefs.saveProfile(_profileModel!);
       print(profileModel);
     } catch (e) {
       _error = e.toString();
@@ -245,13 +246,43 @@ class ProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> saveProfile() async {
-    await sharedPrefs.saveProfile(profileModel!);
+  Future<void> fillProfileFromSharedPref() async {
+    _profileModel = await sharedPrefs.getProfile();
+    _updateProfile = true;
+    if (_profileModel != null) {
+      _age = _profileModel!.age;
+      _gender = _profileModel!.gender;
+      _bio = _profileModel!.about;
+      _profilePhoto = _profileModel!.profilePictureUrl;
+      _home = _profileModel!.home;
+      _occupation = _profileModel!.occupation;
+      _education = _profileModel!.education;
+      _subgroup = _profileModel!.subgroup;
+      _lookingFor = _profileModel!.lookingFor;
+      _advice = _profileModel!.advice;
+      _meaningOfLife = _profileModel!.meaningOfLife;
+      _achievements = _profileModel!.achievements;
+      _challenges = _profileModel!.challenges;
+      _interests = _profileModel!.interests ?? [];
+      _languages = _profileModel!.languages ?? [];
+      notifyListeners();
+    }
+  }
+
+  void updateFrom(ProfileProvider other) {
+    _profileModel = other.profileModel;
+    _error = other.error;
+    _isLoading = other.isLoading;
     notifyListeners();
   }
 
-  Future<void> getProfileFromSharedPref() async {
-    _profileModel = await sharedPrefs.getProfile();
-    notifyListeners();
-  }
+  // Future<void> saveProfile() async {
+  //   await sharedPrefs.saveProfile(profileModel!);
+  //   notifyListeners();
+  // }
+
+  // Future<void> getProfileFromSharedPref() async {
+  //   _profileModel = await sharedPrefs.getProfile();
+  //   notifyListeners();
+  // }
 }

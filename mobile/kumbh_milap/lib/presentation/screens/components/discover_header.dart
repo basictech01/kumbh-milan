@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:kumbh_milap/presentation/screens/components/discover_button.dart';
+import 'location_badge.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DiscoverHeader extends StatelessWidget {
-  final String profilePhoto;
+  final String? profilePhoto;
   final VoidCallback onLikePressed;
   final VoidCallback onDislikePressed;
+  final VoidCallback onActionButtonPressed;
   final String label;
+  final String? location;
 
   const DiscoverHeader({
     Key? key,
@@ -13,6 +17,8 @@ class DiscoverHeader extends StatelessWidget {
     required this.onLikePressed,
     required this.onDislikePressed,
     required this.label,
+    required this.location,
+    required this.onActionButtonPressed,
   }) : super(key: key);
 
   @override
@@ -26,13 +32,20 @@ class DiscoverHeader extends StatelessWidget {
           bottomRight: Radius.circular(20),
         ),
         image: DecorationImage(
-          image: NetworkImage(profilePhoto),
+          image: profilePhoto != null
+              ? NetworkImage(profilePhoto!)
+              : AssetImage('assets/sadhu.png') as ImageProvider,
           fit: BoxFit.cover,
         ),
       ),
-      child: label != 'Liked'
+      child: label == 'Discover'
           ? Stack(
               children: [
+                if (location != null)
+                  Align(
+                    alignment: AlignmentDirectional(0.97, -0.80),
+                    child: LocationBadge(location: location!),
+                  ),
                 Align(
                   alignment: AlignmentDirectional(0.4, 1.25),
                   child: DiscoverButton(
@@ -47,6 +60,28 @@ class DiscoverHeader extends StatelessWidget {
             )
           : Stack(
               children: [
+                if (location != null)
+                  Align(
+                    alignment: AlignmentDirectional(0.97, -0.80),
+                    child: LocationBadge(location: location!),
+                  ),
+                Align(
+                  alignment: AlignmentDirectional(0, 1.15),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        minimumSize: const Size(150, 45)),
+                    onPressed: onActionButtonPressed,
+                    child: Text(
+                      label == 'Likes'
+                          ? AppLocalizations.of(context)!.doMatch
+                          : AppLocalizations.of(context)!.callNow,
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                  ),
+                ),
                 Align(
                   alignment: AlignmentDirectional(-0.97, -0.85),
                   child: Container(

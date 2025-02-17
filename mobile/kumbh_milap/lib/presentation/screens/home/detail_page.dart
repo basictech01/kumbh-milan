@@ -8,12 +8,12 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class DetailPage extends StatelessWidget {
   final ProfileModel profileModel;
-  final String label;
+  final String labelPage;
   final VoidCallback onPressed;
   const DetailPage({
     Key? key,
     required this.profileModel,
-    required this.label,
+    required this.labelPage,
     required this.onPressed,
   }) : super(key: key);
 
@@ -24,11 +24,12 @@ class DetailPage extends StatelessWidget {
         child: Column(
           children: [
             DiscoverHeader(
-              profilePhoto:
-                  profileModel.profilePictureUrl ?? '/placeholder.jpg',
+              profilePhoto: profileModel.profilePictureUrl,
               onLikePressed: () {},
               onDislikePressed: () {},
-              label: 'Liked',
+              label: labelPage,
+              location: profileModel.home,
+              onActionButtonPressed: onPressed,
             ),
             const SizedBox(height: 30),
             ProfileInfo(
@@ -37,7 +38,6 @@ class DetailPage extends StatelessWidget {
               gender: profileModel.gender,
               education: profileModel.education,
               occupation: profileModel.occupation,
-              location: profileModel.home,
               subGroup: profileModel.subgroup,
             ),
             const SizedBox(height: 20),
@@ -45,7 +45,10 @@ class DetailPage extends StatelessWidget {
               interests: profileModel.interests ?? [],
               languages: profileModel.languages ?? [],
             ),
-            const SizedBox(height: 20),
+            InfoSection(information: {
+              AppLocalizations.of(context)!.bio: profileModel.about,
+            }),
+            const SizedBox(height: 10),
             InfoSection(
               title: AppLocalizations.of(context)!.additionInfo,
               information: {
@@ -59,22 +62,6 @@ class DetailPage extends StatelessWidget {
                 AppLocalizations.of(context)!.challenges:
                     profileModel.challenges,
               },
-            ),
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    minimumSize: const Size(200, 45)),
-                onPressed: onPressed,
-                child: Text(
-                  label == 'Likes'
-                      ? AppLocalizations.of(context)!.doMatch
-                      : AppLocalizations.of(context)!.callNow,
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-              ),
             ),
           ],
         ),

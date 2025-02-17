@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kumbh_milap/app_theme.dart';
 import 'package:kumbh_milap/core/model/profile_model.dart';
 import 'package:kumbh_milap/presentation/providers/like_provider.dart';
 import 'package:kumbh_milap/presentation/screens/home/detail_page.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LikeProfilePage extends StatelessWidget {
+  @override
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -26,30 +28,86 @@ class LikeProfilePage extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: switch (likeProvider.likeState) {
-                LikeState.initial => Center(child: CircularProgressIndicator()),
-                LikeState.loading => Center(child: CircularProgressIndicator()),
-                LikeState.loaded => GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // 2 columns
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: 1.0, // Adjust item size ratio
-                    ),
-                    itemCount: likeProvider.matches.length,
-                    itemBuilder: (context, index) {
-                      final match = likeProvider.matches[index];
-                      return MatchCard(
-                        profileModel: match,
-                      );
-                    },
-                  ),
-                LikeState.error => Center(child: Text('Error'))
-              },
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await likeProvider.getMatches();
+                },
+                color: Theme.of(context).scaffoldBackgroundColor,
+                backgroundColor: Theme.of(context).primaryColor,
+                child: switch (likeProvider.likeState) {
+                  LikeState.initial =>
+                    _buildLoadingOrError(child: CircularProgressIndicator()),
+                  LikeState.loading =>
+                    _buildLoadingOrError(child: CircularProgressIndicator()),
+                  LikeState.loaded => likeProvider.matches.isEmpty
+                      ? _buildEmptyState(context)
+                      : GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 1.0,
+                          ),
+                          itemCount: likeProvider.matches.length,
+                          itemBuilder: (context, index) {
+                            final match = likeProvider.matches[index];
+                            return MatchCard(
+                              profileModel: match,
+                            );
+                          },
+                        ),
+                  LikeState.error => _buildLoadingOrError(
+                      child: Text(AppLocalizations.of(context)!.error))
+                },
+              ),
             )
           ],
         );
       }),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.7,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/sadhu.png', // Add this image to your assets
+              height: 200,
+              width: 200,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              AppLocalizations.of(context)!.noLikesFound,
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.pullToRefresh,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingOrError({required Widget child}) {
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Container(
+        height: 500, // Arbitrary height to ensure scrollability
+        child: Center(child: child),
+      ),
     );
   }
 }
@@ -68,7 +126,7 @@ class MatchCard extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => DetailPage(
                 profileModel: profileModel,
-                label: 'Likes',
+                labelPage: 'Likes',
                 onPressed: () {},
               ),
             ),
@@ -91,35 +149,42 @@ class MatchCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: Stack(
               children: [
-                Image.network(
-                  profileModel.profilePictureUrl ??
-                      "https://fastly.picsum.photos/id/1075/200/200.jpg?hmac=a9PcCsXBonPZ7LCLyWX6dHM1XGbcojML0qhnq-Ee4a4",
-                  width: double.infinity,
-                  height: 350,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                (loadingProgress.expectedTotalBytes ?? 1)
-                            : null,
+                (profileModel.profilePictureUrl == null ||
+                        profileModel.profilePictureUrl!.isEmpty)
+                    ? Image.asset(
+                        'assets/sadhu.png',
+                        width: double.infinity,
+                        height: 350,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.network(
+                        profileModel.profilePictureUrl ?? '',
+                        width: double.infinity,
+                        height: 350,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      (loadingProgress.expectedTotalBytes ?? 1)
+                                  : null,
+                            ),
+                          );
+                        },
+                        errorBuilder: (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
+                          return Center(
+                            child: Icon(
+                              Icons.error,
+                              color: Colors.red,
+                              size: 50,
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                  errorBuilder: (BuildContext context, Object exception,
-                      StackTrace? stackTrace) {
-                    return Center(
-                      child: Icon(
-                        Icons.error,
-                        color: Colors.red,
-                        size: 50,
-                      ),
-                    );
-                  },
-                ),
                 Container(
                   height: 350,
                   decoration: BoxDecoration(
@@ -133,53 +198,53 @@ class MatchCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 10,
-                  left: 10,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.purple.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      profileModel.subgroup ?? "Brahmin",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 50,
-                  left: 10,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      profileModel.occupation ?? "Software Engineer",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   top: 10,
+                //   left: 10,
+                //   child: Container(
+                //     padding:
+                //         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                //     decoration: BoxDecoration(
+                //       color: Colors.purple.withOpacity(0.8),
+                //       borderRadius: BorderRadius.circular(10),
+                //     ),
+                //     child: Text(
+                //       profileModel.subgroup ?? "Brahmin",
+                //       style: const TextStyle(
+                //         color: Colors.white,
+                //         fontWeight: FontWeight.bold,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Positioned(
+                //   bottom: 50,
+                //   left: 10,
+                //   child: Container(
+                //     padding:
+                //         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                //     decoration: BoxDecoration(
+                //       color: Colors.white.withOpacity(0.8),
+                //       borderRadius: BorderRadius.circular(20),
+                //     ),
+                //     child: Text(
+                //       profileModel.occupation ?? "Software Engineer",
+                //       style: const TextStyle(fontWeight: FontWeight.bold),
+                //     ),
+                //   ),
+                // ),
                 Positioned(
                   bottom: 20,
-                  left: 10,
+                  left: 8,
                   child: Row(
                     children: [
                       Text(
-                        profileModel.name ?? "SHIV",
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        "${profileModel.name}, ${profileModel.age} ",
+                        style:
+                            Theme.of(context).textTheme.displayMedium?.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
                       )
                     ],
                   ),
@@ -188,7 +253,7 @@ class MatchCard extends StatelessWidget {
                   bottom: 5,
                   left: 10,
                   child: Text(
-                    "${profileModel.home}, ${profileModel.age} ",
+                    "${profileModel.occupation}",
                     style: const TextStyle(
                       color: Colors.white70,
                       fontSize: 14,

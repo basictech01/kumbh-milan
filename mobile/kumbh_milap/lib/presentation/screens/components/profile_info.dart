@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kumbh_milap/app_theme.dart';
-import 'package:kumbh_milap/presentation/screens/components/location_badge.dart';
 
 class ProfileInfo extends StatelessWidget {
   final String? name;
@@ -8,7 +7,6 @@ class ProfileInfo extends StatelessWidget {
   final String? gender;
   final String? occupation;
   final String? education;
-  final String? location;
   final String? subGroup;
 
   const ProfileInfo({
@@ -18,7 +16,6 @@ class ProfileInfo extends StatelessWidget {
     this.gender,
     this.occupation,
     this.education,
-    this.location,
     this.subGroup,
   }) : super(key: key);
 
@@ -69,21 +66,16 @@ class ProfileInfo extends StatelessWidget {
                 ),
               ),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  if (subGroup != null && subGroup!.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: _buildChip(context, subGroup!),
-                    ),
                   if (gender != null && gender!.isNotEmpty)
                     _buildChip(context, gender!),
+                  if (subGroup != null && subGroup!.isNotEmpty)
+                    _buildChip(context, subGroup!),
                 ],
               ),
             ],
           ),
-          const SizedBox(height: 5),
-          LocationBadge(location: location ?? ''),
           const SizedBox(height: 10),
           Container(
             height: 1,

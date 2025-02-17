@@ -28,7 +28,7 @@ class AuthProvider extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   void updateUsername(String value) {
-    _username = value;
+    _username = value.toLowerCase();
     notifyListeners();
   }
 

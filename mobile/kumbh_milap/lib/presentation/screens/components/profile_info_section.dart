@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import '../../../app_theme.dart';
 
 class InfoSection extends StatelessWidget {
-  final String title;
+  final String? title;
   final Map<String, String?> information;
 
   const InfoSection({
     Key? key,
-    required this.title,
+    this.title,
     required this.information,
   }) : super(key: key);
 
@@ -30,11 +30,12 @@ class InfoSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title,
-                  style: Theme.of(context)
-                      .textTheme
-                      .displayMedium
-                      ?.copyWith(color: AppTheme.black, fontSize: 20)),
+              if (title != null && title!.isNotEmpty)
+                Text(title!,
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayMedium
+                        ?.copyWith(color: AppTheme.black, fontSize: 20)),
               const SizedBox(height: 10),
               ...filteredInformation
                   .map((entry) =>

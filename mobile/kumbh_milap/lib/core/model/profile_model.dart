@@ -73,7 +73,7 @@ class ProfileModel {
       home: json['home_town'],
       occupation: json['occupation'],
       education: json['education'],
-      subgroup: json['subgroup'],
+      subgroup: json['sub_group'],
       lookingFor: json['looking_for'],
       advice: json['advice_to_younger_self'],
       meaningOfLife: json['your_meaning_of_life'],

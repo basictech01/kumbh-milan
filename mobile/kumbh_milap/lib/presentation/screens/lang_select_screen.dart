@@ -43,10 +43,13 @@ class LanguageScreen extends StatelessWidget {
                     context, MaterialPageRoute(builder: (_) => LoginScreen()));
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).primaryColor,
-              ),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  minimumSize: const Size(150, 45)),
               child: Text("English", style: TextStyle(color: Colors.white)),
             ),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 languageProvider.setLanguage('hi');
@@ -54,8 +57,10 @@ class LanguageScreen extends StatelessWidget {
                     context, MaterialPageRoute(builder: (_) => LoginScreen()));
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).primaryColor,
-              ),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  minimumSize: const Size(150, 45)),
               child:
                   Text("हिन्दी (Hindi)", style: TextStyle(color: Colors.white)),
             ),

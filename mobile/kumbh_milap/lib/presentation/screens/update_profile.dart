@@ -4,15 +4,15 @@ import '../providers/profile_provider.dart';
 import 'package:kumbh_milap/app_theme.dart';
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
-class CreateProfileScreen extends StatefulWidget {
-  const CreateProfileScreen({super.key});
+class UpdateProfileScreen extends StatefulWidget {
+  final ProfileProvider userProvider;
+  const UpdateProfileScreen({super.key, required this.userProvider});
 
   @override
-  _CreateProfileScreenState createState() => _CreateProfileScreenState();
+  _UpdateProfileScreenState createState() => _UpdateProfileScreenState();
 }
 
-class _CreateProfileScreenState extends State<CreateProfileScreen> {
-  late ProfileProvider profileProvider;
+class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   int additionalFields = 0;
   final List<String> allLanguages = [
     'English',
@@ -37,13 +37,11 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   @override
   void initState() {
     super.initState();
-    profileProvider = Provider.of<ProfileProvider>(context, listen: false);
-    profileProvider.getProfile(); // Fetch existing profile data if any
+    widget.userProvider.fillProfileFromSharedPref();
   }
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<ProfileProvider>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
@@ -57,12 +55,12 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 // Profile Photo Upload
                 GestureDetector(
                   onTap: () async {
-                    await userProvider.pickAndUploadProfilePhoto();
+                    await widget.userProvider.pickAndUploadProfilePhoto();
                   },
                   child: CircleAvatar(
                     radius: 50,
-                    backgroundImage: userProvider.profilePhoto != null
-                        ? NetworkImage(userProvider.profilePhoto!)
+                    backgroundImage: widget.userProvider.profilePhoto != null
+                        ? NetworkImage(widget.userProvider.profilePhoto!)
                         : null,
                   ),
                 ),
@@ -70,9 +68,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 const SizedBox(height: 40),
 
                 TextField(
-                  controller:
-                      TextEditingController(text: userProvider.age?.toString()),
-                  onChanged: userProvider.updateAge,
+                  controller: TextEditingController(
+                      text: widget.userProvider.age?.toString()),
+                  onChanged: widget.userProvider.updateAge,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.age,
                     labelStyle: Theme.of(context).textTheme.bodyLarge,
@@ -90,8 +88,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 const SizedBox(height: 20),
 
                 TextField(
-                  controller: TextEditingController(text: userProvider.home),
-                  onChanged: userProvider.updateHome,
+                  controller:
+                      TextEditingController(text: widget.userProvider.home),
+                  onChanged: widget.userProvider.updateHome,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.home,
                     labelStyle: Theme.of(context).textTheme.bodyLarge,
@@ -119,10 +118,10 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                   ].map((gender) {
                     return ChoiceChip(
                       label: Text(gender[1]),
-                      selected: userProvider.gender == gender[0],
+                      selected: widget.userProvider.gender == gender[0],
                       onSelected: (bool selected) {
                         if (selected) {
-                          userProvider.updateGender(gender[0]);
+                          widget.userProvider.updateGender(gender[0]);
                         }
                       },
                       shape: RoundedRectangleBorder(
@@ -131,7 +130,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                       selectedColor: Theme.of(context).primaryColor,
                       backgroundColor: Colors.grey[100],
                       labelStyle: TextStyle(
-                        color: userProvider.gender == gender[0]
+                        color: widget.userProvider.gender == gender[0]
                             ? Colors.white
                             : Colors.black,
                       ),
@@ -143,9 +142,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
                 // Education TextField
                 TextField(
-                  controller:
-                      TextEditingController(text: userProvider.education),
-                  onChanged: userProvider.updateEducation,
+                  controller: TextEditingController(
+                      text: widget.userProvider.education),
+                  onChanged: widget.userProvider.updateEducation,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.education,
                     labelStyle: Theme.of(context).textTheme.bodyLarge,
@@ -162,9 +161,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 const SizedBox(height: 20),
 
                 TextField(
-                  controller:
-                      TextEditingController(text: userProvider.occupation),
-                  onChanged: userProvider.updateOccupation,
+                  controller: TextEditingController(
+                      text: widget.userProvider.occupation),
+                  onChanged: widget.userProvider.updateOccupation,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.occupation,
                     labelStyle: Theme.of(context).textTheme.bodyLarge,
@@ -181,8 +180,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 const SizedBox(height: 20),
                 TextField(
                   controller:
-                      TextEditingController(text: userProvider.subgroup),
-                  onChanged: userProvider.updateSubgroup,
+                      TextEditingController(text: widget.userProvider.subgroup),
+                  onChanged: widget.userProvider.updateSubgroup,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.subGroup,
                     labelStyle: Theme.of(context).textTheme.bodyLarge,
@@ -219,9 +218,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
               ] else if (additionalFields == 1) ...[
                 SingleChildScrollView(
                   child: TextField(
-                    controller:
-                        TextEditingController(text: userProvider.lookingFor),
-                    onChanged: userProvider.updateLookingFor,
+                    controller: TextEditingController(
+                        text: widget.userProvider.lookingFor),
+                    onChanged: widget.userProvider.updateLookingFor,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.lookingFor,
                       labelStyle: Theme.of(context).textTheme.bodyLarge,
@@ -240,8 +239,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 const SizedBox(height: 20),
                 SingleChildScrollView(
                   child: TextField(
-                    controller: TextEditingController(text: userProvider.bio),
-                    onChanged: userProvider.updateBio,
+                    controller:
+                        TextEditingController(text: widget.userProvider.bio),
+                    onChanged: widget.userProvider.updateBio,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.bio,
                       labelStyle: Theme.of(context).textTheme.bodyLarge,
@@ -267,16 +267,16 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                   spacing: 8.0,
                   children: allLanguages.map((language) {
                     final isSelected =
-                        userProvider.languages.contains(language);
+                        widget.userProvider.languages.contains(language);
                     return ChoiceChip(
                       label: Text(language),
                       selected: isSelected,
                       onSelected: (bool selected) {
                         setState(() {
                           if (selected) {
-                            userProvider.addLanguage(language);
+                            widget.userProvider.addLanguage(language);
                           } else {
-                            userProvider.removeLanguage(language);
+                            widget.userProvider.removeLanguage(language);
                           }
                         });
                       },
@@ -300,16 +300,16 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                   spacing: 8.0,
                   children: allInterest.map((interest) {
                     final isSelected =
-                        userProvider.interests.contains(interest);
+                        widget.userProvider.interests.contains(interest);
                     return ChoiceChip(
                       label: Text(interest),
                       selected: isSelected,
                       onSelected: (bool selected) {
                         setState(() {
                           if (selected) {
-                            userProvider.addInterest(interest);
+                            widget.userProvider.addInterest(interest);
                           } else {
-                            userProvider.removeInterest(interest);
+                            widget.userProvider.removeInterest(interest);
                           }
                         });
                       },
@@ -360,8 +360,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 SingleChildScrollView(
                   child: TextField(
                     controller:
-                        TextEditingController(text: userProvider.advice),
-                    onChanged: userProvider.updateAdvice,
+                        TextEditingController(text: widget.userProvider.advice),
+                    onChanged: widget.userProvider.updateAdvice,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.advice,
                       labelStyle: Theme.of(context).textTheme.bodyLarge,
@@ -381,9 +381,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 const SizedBox(height: 10),
                 SingleChildScrollView(
                   child: TextField(
-                    controller:
-                        TextEditingController(text: userProvider.meaningOfLife),
-                    onChanged: userProvider.updateMeaningOfLife,
+                    controller: TextEditingController(
+                        text: widget.userProvider.meaningOfLife),
+                    onChanged: widget.userProvider.updateMeaningOfLife,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.meaningOfLife,
                       labelStyle: Theme.of(context).textTheme.bodyLarge,
@@ -403,9 +403,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 const SizedBox(height: 10),
                 SingleChildScrollView(
                   child: TextField(
-                    controller:
-                        TextEditingController(text: userProvider.achievements),
-                    onChanged: userProvider.updateAchievements,
+                    controller: TextEditingController(
+                        text: widget.userProvider.achievements),
+                    onChanged: widget.userProvider.updateAchievements,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.achievements,
                       labelStyle: Theme.of(context).textTheme.bodyLarge,
@@ -425,9 +425,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 const SizedBox(height: 10),
                 SingleChildScrollView(
                   child: TextField(
-                    controller:
-                        TextEditingController(text: userProvider.challenges),
-                    onChanged: userProvider.updateChallenges,
+                    controller: TextEditingController(
+                        text: widget.userProvider.challenges),
+                    onChanged: widget.userProvider.updateChallenges,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.challenges,
                       labelStyle: Theme.of(context).textTheme.bodyLarge,
@@ -463,9 +463,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                             size: 28, color: AppTheme.white)),
                     ElevatedButton(
                         onPressed: () async {
-                          await userProvider.createOrUpdateProfile();
+                          await widget.userProvider.createOrUpdateProfile();
 
-                          if (userProvider.error == null) {
+                          if (widget.userProvider.error == null) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                   content: Text(AppLocalizations.of(context)!
@@ -474,7 +474,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                             Navigator.pushReplacementNamed(context, '/home');
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(userProvider.error!)),
+                              SnackBar(
+                                  content: Text(widget.userProvider.error!)),
                             );
                           }
                         },
