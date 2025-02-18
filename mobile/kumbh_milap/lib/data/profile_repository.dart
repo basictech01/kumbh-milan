@@ -21,7 +21,7 @@ class ProfileRepository {
     // print("Request Payload: ${jsonEncode(profileData)}");
 
     final response = await http.post(
-      Uri.parse('$baseUrl/'),
+      Uri.parse('$baseUrl/create'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': "Bearer ${token}"
@@ -104,7 +104,7 @@ class ProfileRepository {
     print("Request Payload: ${jsonEncode(profileData)}");
 
     final response = await http.put(
-      Uri.parse(baseUrl),
+      Uri.parse('$baseUrl/update'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': "Bearer ${token}"

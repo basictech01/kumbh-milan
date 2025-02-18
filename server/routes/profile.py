@@ -91,7 +91,7 @@ def get_profile_handler(id):
     return SuccessResponse.from_value(result.value.to_dict(), 200)
 
 
-@profile.route("/", methods=["POST"])
+@profile.route("/create", methods=["POST"])
 @jwt_required()
 def create_profile_handler():
     log.error("Create profile")
@@ -105,7 +105,7 @@ def create_profile_handler():
     return SuccessResponse.from_value(result.value.to_dict(), 201)
 
 
-@profile.route("/", methods=["PUT"])
+@profile.route("/update", methods=["PUT"])
 @jwt_required()
 def update_profile_handler():
     result = validate_profile_request(request.json)

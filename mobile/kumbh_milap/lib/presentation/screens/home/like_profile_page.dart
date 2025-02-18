@@ -119,6 +119,7 @@ class MatchCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final likeProvider = Provider.of<LikeProvider>(context);
     return GestureDetector(
         onTap: () {
           Navigator.push(
@@ -127,7 +128,9 @@ class MatchCard extends StatelessWidget {
               builder: (context) => DetailPage(
                 profileModel: profileModel,
                 labelPage: 'Likes',
-                onPressed: () {},
+                onPressed: () {
+                  likeProvider.matchNow(profileModel.user_id);
+                },
               ),
             ),
           );

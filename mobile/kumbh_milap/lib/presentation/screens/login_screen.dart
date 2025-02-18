@@ -134,6 +134,20 @@ class LoginScreen extends StatelessWidget {
                       ),
                 ),
               ),
+              const SizedBox(height: 180),
+              GestureDetector(
+                onTap: () {
+                  // Navigate to terms and conditions page
+                  Navigator.pushNamed(context, '/termsConditions');
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.termsAndConditions,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppTheme.secondaryColor,
+                        decoration: TextDecoration.underline,
+                      ),
+                ),
+              ),
             ],
           ),
         ),

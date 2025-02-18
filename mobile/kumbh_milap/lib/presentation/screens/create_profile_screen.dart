@@ -12,7 +12,7 @@ class CreateProfileScreen extends StatefulWidget {
 }
 
 class _CreateProfileScreenState extends State<CreateProfileScreen> {
-  late ProfileProvider profileProvider;
+  ProfileProvider profileProvider = ProfileProvider();
   int additionalFields = 0;
   final List<String> allLanguages = [
     'English',
@@ -35,15 +35,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-    profileProvider = Provider.of<ProfileProvider>(context, listen: false);
-    profileProvider.getProfile(); // Fetch existing profile data if any
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<ProfileProvider>(context);
+    final userProvider = profileProvider;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(

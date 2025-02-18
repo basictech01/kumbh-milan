@@ -18,6 +18,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'presentation/screens/lang_select_screen.dart';
 import 'presentation/screens/splash_screen.dart';
+import 'presentation/screens/terms_conditions.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider(authUseCase)),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) {
           final provider = LanguageProvider(sharedPrefs);
           provider.loadLanguage();
@@ -65,8 +67,8 @@ class MyApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: [
-              Locale('en'), // English
-              Locale('hi'), // Spanish
+              Locale('en'),
+              Locale('hi'),
             ],
             initialRoute: "/splash",
             routes: {
@@ -76,9 +78,8 @@ class MyApp extends StatelessWidget {
               "/createProfile": (context) => CreateProfileScreen(),
               "/splash": (context) => const SplashScreen(),
               "/langSelect": (context) => LanguageScreen(),
-              "/updateProfile": (context) => UpdateProfileScreen(
-                    userProvider: ProfileProvider(),
-                  ),
+              "/updateProfile": (context) => UpdateProfileScreen(),
+              "/termsConditions": (context) => const TermsConditions(),
             },
           );
         },

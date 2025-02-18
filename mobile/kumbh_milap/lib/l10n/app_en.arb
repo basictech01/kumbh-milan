@@ -219,6 +219,7 @@
   "editProfile": "Edit Profile",
   "callNow": "Call Now",
   "next": "Next",
+  "termsAndConditions": "Terms and Conditions",
   "networkError": "Network error. Please check your internet connection and try again.",
   "noUsersFound": "No users found."
 }

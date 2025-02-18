@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kumbh_milap/app_theme.dart';
+import 'package:kumbh_milap/presentation/providers/profile_provider.dart';
 import 'package:kumbh_milap/presentation/screens/home/discover_page.dart';
 import 'package:kumbh_milap/presentation/screens/home/like_profile_page.dart';
 import 'package:kumbh_milap/presentation/screens/home/match_profile_page.dart';
 import 'package:kumbh_milap/presentation/screens/home/profile_page.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -42,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ProfileProvider>(context, listen: false)..getProfile();
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
