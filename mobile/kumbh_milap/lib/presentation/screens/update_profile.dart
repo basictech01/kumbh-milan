@@ -46,19 +46,51 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 50),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () => Navigator.pop(context),
+                    style: IconButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      padding: EdgeInsets.all(12),
+                    ),
+                  ),
+                ],
+              ),
               if (additionalFields == 0) ...[
                 // Profile Photo Upload
-                GestureDetector(
-                  onTap: () async {
-                    await userProvider.pickAndUploadProfilePhoto();
-                  },
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: userProvider.profilePhoto != null
-                        ? NetworkImage(userProvider.profilePhoto!)
-                        : null,
-                  ),
+                Stack(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        await userProvider.pickAndUploadProfilePhoto();
+                      },
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Colors.grey[200],
+                        backgroundImage: userProvider.profilePhoto != null
+                            ? NetworkImage(userProvider.profilePhoto!)
+                            : AssetImage('assets/sadhu.png') as ImageProvider,
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.edit,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
 
                 const SizedBox(height: 40),

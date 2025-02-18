@@ -12,7 +12,20 @@ class CreateProfileScreen extends StatefulWidget {
 }
 
 class _CreateProfileScreenState extends State<CreateProfileScreen> {
-  ProfileProvider profileProvider = ProfileProvider();
+  late final ProfileProvider profileProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    profileProvider = ProfileProvider();
+  }
+
+  @override
+  void dispose() {
+    profileProvider.dispose();
+    super.dispose();
+  }
+
   int additionalFields = 0;
   final List<String> allLanguages = [
     'English',
@@ -48,16 +61,37 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
               const SizedBox(height: 50),
               if (additionalFields == 0) ...[
                 // Profile Photo Upload
-                GestureDetector(
-                  onTap: () async {
-                    await userProvider.pickAndUploadProfilePhoto();
-                  },
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: userProvider.profilePhoto != null
-                        ? NetworkImage(userProvider.profilePhoto!)
-                        : null,
-                  ),
+                Stack(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        await userProvider.pickAndUploadProfilePhoto();
+                      },
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Colors.grey[200],
+                        backgroundImage: userProvider.profilePhoto != null
+                            ? NetworkImage(userProvider.profilePhoto!)
+                            : AssetImage('assets/sadhu.png') as ImageProvider,
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.edit,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
 
                 const SizedBox(height: 40),
@@ -114,9 +148,11 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                       label: Text(gender[1]),
                       selected: userProvider.gender == gender[0],
                       onSelected: (bool selected) {
-                        if (selected) {
-                          userProvider.updateGender(gender[0]);
-                        }
+                        setState(() {
+                          if (selected) {
+                            userProvider.updateGender(gender[0]);
+                          }
+                        });
                       },
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
