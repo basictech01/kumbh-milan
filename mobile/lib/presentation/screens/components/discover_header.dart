@@ -49,7 +49,7 @@ class DiscoverHeader extends StatelessWidget {
                 Align(
                   alignment: AlignmentDirectional(0.4, 1.25),
                   child: DiscoverButton(
-                      onPressed: onDislikePressed, label: 'Connect'),
+                      onPressed: onLikePressed, label: 'Connect'),
                 ),
                 Align(
                   alignment: AlignmentDirectional(-0.4, 1.25),

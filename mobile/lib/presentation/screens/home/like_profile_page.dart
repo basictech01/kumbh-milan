@@ -128,8 +128,9 @@ class MatchCard extends StatelessWidget {
               builder: (context) => DetailPage(
                 profileModel: profileModel,
                 labelPage: 'Likes',
-                onPressed: () {
-                  likeProvider.matchNow(profileModel.user_id);
+                onPressed:  () async {
+                  await likeProvider.matchNow(profileModel.user_id);
+                  Navigator.pop(context);
                 },
               ),
             ),
