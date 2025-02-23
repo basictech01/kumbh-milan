@@ -11,7 +11,7 @@ class LanguageScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Kumbh Milap",
+          "Kumbh Milan",
           style: Theme.of(context).textTheme.displayLarge,
         ),
         backgroundColor: Theme.of(context).primaryColor,

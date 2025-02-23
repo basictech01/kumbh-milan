@@ -55,7 +55,7 @@ Multi-language support to accommodate users from different regions.
 
 - **Frontend**: Flutter
 - **Backend**: Python
-- **Database**: PostgreSQL
+- **Database**: MySQL
 - **Containerization**: Docker
 
 ## How to run
